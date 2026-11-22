@@ -81,7 +81,7 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
         </div>
         <div class="footer-divider"></div>
         <div class="footer-meta">
-            <p>©<?= date('Y') ?> HVM Digital ID. All rights reserved.</p>
+            <p>©<?= date('Y') ?> <a href="https://hvm-digital.id/jasa-pembuatan-website-surabaya-murah" target="_blank" rel="noopener" title="Jasa Pembuatan Website Surabaya Murah - HVM Digital ID" style="color: inherit; text-decoration: underline; text-underline-offset: 3px;">HVM Digital ID</a>. All rights reserved.</p>
             <div class="footer-policy">
                 <a href="#">Kebijakan Privasi</a>
                 <a href="#">Syarat Layanan</a>
