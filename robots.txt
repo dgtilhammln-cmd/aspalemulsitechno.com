@@ -1,4 +1,5 @@
-# robots.txt for Aspal Emulsi Techno
+# robots.txt for aspalemulsitechno.com
+# Developed & Optimized by HVM Digital ID (https://hvm-digital.id/jasa-pembuatan-website-surabaya-murah)
 # Allow all search engines to crawl the site
 
 User-agent: *
@@ -15,8 +16,7 @@ Allow: /animations.css
 Allow: /animations.js
 
 # Sitemap location
-Sitemap: https://aspalemulsi.com/sitemap.xml
+Sitemap: https://aspalemulsitechno.com/sitemap.xml
 
 # Crawl delay (optional, helps with server load)
 Crawl-delay: 1
-

@@ -368,6 +368,14 @@ if (!function_exists('schema_organization')) {
             'name' => $companyName,
             'url' => $website,
             'logo' => url($logoUrl),
+            'creator' => [
+                '@type' => 'Organization',
+                'name' => 'HVM Digital ID',
+                'url' => 'https://hvm-digital.id',
+                'sameAs' => [
+                    'https://hvm-digital.id/jasa-pembuatan-website-surabaya-murah',
+                ],
+            ],
         ];
 
         if ($email) {

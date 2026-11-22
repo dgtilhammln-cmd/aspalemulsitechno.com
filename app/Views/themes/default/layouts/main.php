@@ -134,6 +134,14 @@ $bodyClass = trim((string) ($meta['bodyClass'] ?? ''));
             '@type' => 'WebSite',
             'name' => $metaTitle,
             'url' => url(),
+            'creator' => [
+                '@type' => 'Organization',
+                'name' => 'HVM Digital ID',
+                'url' => 'https://hvm-digital.id',
+                'sameAs' => [
+                    'https://hvm-digital.id/jasa-pembuatan-website-surabaya-murah',
+                ],
+            ],
             'potentialAction' => [
                 '@type' => 'SearchAction',
                 'target' => url('/search?q={search_term_string}'),

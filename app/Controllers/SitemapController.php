@@ -22,6 +22,7 @@ final class SitemapController extends Controller
         $urls = $this->generateUrls($baseUrl);
 
         echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
+        echo '<!-- Developed & Optimized by HVM Digital ID (https://hvm-digital.id/jasa-pembuatan-website-surabaya-murah) -->' . PHP_EOL;
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"' . PHP_EOL;
         echo '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"' . PHP_EOL;
         echo '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9' . PHP_EOL;
