@@ -1,0 +1,56 @@
+====================================================
+QUERY SQL MANUAL: CREATE TABLE content_sections
+====================================================
+
+Jalankan query ini di database MySQL/MariaDB:
+
+----------------------------------------------------
+CREATE TABLE IF NOT EXISTS content_sections (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    page_identifier VARCHAR(100) NOT NULL COMMENT 'Identifier halaman (e.g., blog-detail, home)',
+    section_key VARCHAR(100) NOT NULL COMMENT 'Key section (e.g., workflow-heading, services-heading)',
+    content_html LONGTEXT NULL COMMENT 'HTML content untuk section',
+    description VARCHAR(255) NULL COMMENT 'Deskripsi section (optional)',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY idx_page_section (page_identifier, section_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+----------------------------------------------------
+
+CARA MENJALANKAN:
+1. Buka phpMyAdmin / MySQL Workbench / CLI MySQL
+2. Pilih database: aspal_emulsi
+3. Copy-paste query di atas
+4. Execute query
+
+ATAU via command line:
+mysql -u root -p aspal_emulsi < admin/migrations/create_content_sections_table.sql
+
+ATAU via PHP:
+php admin/install.php
+
+====================================================
+QUERY UNTUK CEK TABLE (OPTIONAL):
+====================================================
+
+-- Cek apakah table sudah ada
+SHOW TABLES LIKE 'content_sections';
+
+-- Cek struktur table
+DESCRIBE content_sections;
+
+-- Cek data di table
+SELECT * FROM content_sections;
+
+-- Cek jumlah data
+SELECT COUNT(*) as total FROM content_sections;
+
+====================================================
+QUERY UNTUK HAPUS TABLE (HATI-HATI!):
+====================================================
+
+-- Hapus table (akan menghapus semua data)
+DROP TABLE IF EXISTS content_sections;
+
+====================================================
+

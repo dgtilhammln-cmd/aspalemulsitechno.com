@@ -1,0 +1,23 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # default dashboard
+    RewriteRule ^$ index.php [L]
+
+    # block direct PHP requests (.php in original request)
+    RewriteCond %{THE_REQUEST} \s/+[^\s?]+\.php[\s?] [NC]
+    RewriteRule ^ - [R=404,L]
+
+    # allow existing files/directories (assets, uploads)
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # map pretty URLs through the front controller
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !\.[a-zA-Z0-9]{1,4}$
+    RewriteRule ^(.+)$ index.php [QSA,L]
+</IfModule>

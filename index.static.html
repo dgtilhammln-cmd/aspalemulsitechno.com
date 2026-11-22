@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASPAL EMULSI TECHNO.COM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animations.css">
+</head>
+<body>
+    <!-- SECTION 1: HEADER -->
+    <header class="header" id="top">
+        <div class="container header-inner">
+            <a class="header-icon header-icon--social" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Ikuti Instagram">
+                <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                    <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zm5 3a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6zm6.5-3a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3z" />
+                </svg>
+            </a>
+            <div class="logo" data-animate="fade-down">
+              <img src="images/logo.png" style="text-align: center; width: 300px; height: 100%;" alt="ASPAL EMULSI TECHNO.COM">
+            </div>
+            <button class="nav-toggle" type="button" aria-label="Toggle navigasi" aria-expanded="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3.5 6.25A1.25 1.25 0 0 1 4.75 5h14.5a1.25 1.25 0 0 1 0 2.5H4.75A1.25 1.25 0 0 1 3.5 6.25Zm0 5.75A1.25 1.25 0 0 1 4.75 10.75h14.5a1.25 1.25 0 0 1 0 2.5H4.75A1.25 1.25 0 0 1 3.5 12Zm1.25 4.5a1.25 1.25 0 0 0 0 2.5h14.5a1.25 1.25 0 0 0 0-2.5H4.75Z"/>
+                </svg>
+            </button>
+            <nav class="main-nav" aria-label="Navigasi utama">
+                <a class="nav-link" href="#beranda">Beranda</a>
+                <a class="nav-link" href="#layanan">Layanan</a>
+                <a class="nav-link" href="#jasa">Jasa Teknis</a>
+                <a class="nav-link" href="#produk">Produk</a>
+                <a class="nav-link" href="#blog">Blog</a>
+                <a class="nav-link" href="#testimoni">Testimoni</a>
+                <a class="nav-link" href="#galeri">Portofolio</a>
+                <a class="nav-link nav-link--cta" href="#hubungi">Hubungi</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- SECTION 2: HERO SLIDER -->
+    <section class="hero" id="beranda">
+        <div class="hero-slider">
+            <!-- Background Images Slider (Only this slides) -->
+            <div class="background-slider">
+                <div class="hero-background-img active">
+                    <img src="images/hero-1.jpg" alt="worker spreading asphalt on road - Scene 1">
+                    <div class="placeholder-text">Worker spreading asphalt on road - Scene 1</div>
+                </div>
+                <div class="hero-background-img">
+                    <img src="images/hero-2.jpeg" alt="worker spreading asphalt on road - Scene 2">
+                    <div class="placeholder-text">Worker spreading asphalt on road - Scene 2</div>
+                </div>
+                <div class="hero-background-img">
+                    <img src="images/hero-3.jpeg" alt="worker spreading asphalt on road - Scene 3">
+                    <div class="placeholder-text">Worker spreading asphalt on road - Scene 3</div>
+                </div>
+            </div>
+
+            <!-- Static Elements (Always visible, don't move) -->
+            
+            <!-- Inset Images (Top Left) - STATIC -->
+            <div class="hero-inset-images" data-animate="drift-in">
+                <div class="inset-image">
+                    <img src="images/galeri1.jpeg" style="object-fit: cover; width: 100%; height: auto;" alt="New paved road with cone">
+                    <div class="placeholder-text">New paved road with cone</div>
+                </div>
+                <div class="inset-image">
+                    <img src="images/galeri2.jpeg" style="object-fit: cover; width: 100%; height: auto;" alt="Workers with brooms spreading">
+                    <div class="placeholder-text">Workers with brooms spreading</div>
+                </div>
+            </div>
+
+            <!-- Professional Figure (Right) - STATIC -->
+            <div class="hero-person" data-animate="fade-left">
+                <img src="images/hero-person.png" alt="Man in white hardhat & orange vest smiling">
+            </div>
+
+            <!-- Black & Orange Shape Overlay (Bottom Left) - STATIC -->
+            <div class="hero-overlay" data-animate="fade-up">
+                <div class="overlay-orange-shape"></div>
+                <div class="overlay-black-shape">
+                    <div class="overlay-content">
+                        <div class="hero-logo">
+                            <img src="images/logo.png" alt="ASPAL EMULSI TECHNO.COM">
+                        </div>
+                        <div class="hero-text-content">
+                            <p style="font-size: 18px;">
+                                Kami adalah solusi untuk bermacam-macam kebutuhan <strong>aspal emulsi</strong> dan <strong>turunan produk aspal</strong>,
+                                mensuplai kebutuhan proyek jalan dan bangunan berlapis aspal, dengan material berkualitas dan pekerja yang profesional.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slider Controls -->
+            <button class="slider-control prev" onclick="changeSlide(-1)">&#10094;</button>
+            <button class="slider-control next" onclick="changeSlide(1)">&#10095;</button>
+
+            <!-- Slider Dots -->
+            <div class="slider-dots">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: SERVICES -->
+    <section class="services2" id="layanan" data-animate="fade-up">
+        <div class="container">
+            <div class="services2-head" data-animate="fade-up">
+                <span class="services2-kicker">Layanan Unggulan</span>
+                <h2>Layanan Pengerjaan &amp; Kami</h2>
+                <p>
+                    Kami tangani dari preparasi permukaan hingga finishing akhir dengan formulasi emulsi pilihan,
+                    memastikan daya lekat maksimum plus ketahanan cuaca ekstrem.
+                </p>
+            </div>
+
+            <div class="services2-grid">
+                <article class="services2-card hover-glow" data-animate="tilt-up">
+                    <div class="services2-copy">
+                        <span class="services2-badge">Jasa</span>
+                        <h3>Pengerjaan Slurry Seal</h3>
+                        <p>
+                            Lapisan slurry berbasis emulsi dingin untuk menutup retak rambut, memulihkan tekstur, dan
+                            mengembalikan daya cengkeram permukaan jalan kawasan industri maupun perumahan.
+                        </p>
+                        <a class="services2-link" href="#hubungi">Konsultasi pengerjaan →</a>
+                    </div>
+                    <div class="services2-visual">
+                        <div class="services2-float services2-float--amber"></div>
+                        <img src="images/pengerjaan.jpeg" alt="Pengerjaan slurry seal">
+                    </div>
+                </article>
+
+                <article class="services2-card hover-glow" data-animate="tilt-up">
+                    <div class="services2-copy">
+                        <span class="services2-badge">Jasa</span>
+                        <h3>Aplikasi Waterproofing</h3>
+                        <p>
+                            Perlindungan dak &amp; atap beton menggunakan emulsi atau membran torch on, disesuaikan dengan
+                            kondisi lapangan untuk memastikan struktur kedap air dan minim perawatan.
+                        </p>
+                        <a class="services2-link" href="#hubungi">Request survey site →</a>
+                    </div>
+                    <div class="services2-visual">
+                        <div class="services2-float services2-float--copper"></div>
+                        <img src="images/pengerjaan.jpeg" alt="Pengerjaan waterproofing">
+                    </div>
+                </article>
+
+                <article class="services2-card hover-glow" data-animate="tilt-up">
+                    <div class="services2-copy">
+                        <span class="services2-badge">Jasa</span>
+                        <h3>Pemasangan Membran Aspal</h3>
+                        <p>
+                            Tim bersertifikasi mengerjakan pemasangan membran multi-layer untuk podium, basement, dan
+                            rooftop sehingga tahan bocor lebih dari 10 tahun dan siap langsung finishing.
+                        </p>
+                        <a class="services2-link" href="#hubungi">Booking slot proyek →</a>
+                    </div>
+                    <div class="services2-visual">
+                        <div class="services2-float services2-float--gold"></div>
+                        <img src="images/pengerjaan.jpeg" alt="Pemasangan membran aspal">
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: SERVICES -->
+    <section class="services" id="jasa" data-animate="fade-up">
+        <div class="container">
+            <div class="services-highlight">
+                <div class="service-row" data-animate="slide-up">
+                    <div class="service-col service-col-info">
+                        <div class="service-info-card">
+                            <span class="service-badge">Jasa</span>
+                            <h3>Pengerjaan Slurry Seal</h3>
+                        </div>
+                    </div>
+                    <div class="service-col service-col-detail">
+                        <div class="service-detail-card">
+                            <div class="service-image">
+                                <img src="images/pengerjaan.jpeg" alt="Pengerjaan slurry seal">
+                            </div>
+                            <p>
+                                <span>Metode pemeliharaan jalan</span> dengan bubur aspal emulsi sebagai pelapisan permukaan jalan, sehingga menjadi kedap air dan mampu menutup permukaan yang aus, retak, lepas butir, atau terlalu kasar.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service-row" data-animate="slide-up">
+                    <div class="service-col service-col-info">
+                        <div class="service-info-card">
+                            <span class="service-badge">Jasa</span>
+                            <h3>Pengerjaan aplikasi waterproofing</h3>
+                        </div>
+                    </div>
+                    <div class="service-col service-col-detail">
+                        <div class="service-detail-card">
+                            <div class="service-image">
+                                <img src="images/pengerjaan.jpeg" alt="Pengerjaan waterproofing">
+                            </div>
+                            <p>
+                                <span>Jasa pekerjaan aplikasi waterproofing</span> dak &amp; atap beton dengan pilihan material aspal emulsi atau aspal membran, sesuai kebutuhan kondisi lapangan.
+                            </p>
+                        </div>so
+                    </div>
+                </div>
+
+                <div class="service-row" data-animate="slide-up">
+                    <div class="service-col service-col-info">
+                        <div class="service-info-card">
+                            <span class="service-badge">Jasa</span>
+                            <h3>Pengerjaan pemasangan membran aspal</h3>
+                        </div>
+                    </div>
+                    <div class="service-col service-col-detail">
+                        <div class="service-detail-card">
+                            <div class="service-image">
+                                <img src="images/pengerjaan.jpeg" alt="Pemasangan membran aspal">
+                            </div>
+                            <p>
+                                <span>Pemasangan membran aspal</span> untuk dak beton gedung bertingkat, dikerjakan oleh tenaga berpengalaman dengan hasil rapi, kuat, dan tahan bocor untuk perlindungan jangka panjang.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: CLIENTS -->
+    <section class="clients" id="klien" data-animate="fade-up">
+        <div class="container">
+            <div class="clients-highlight">
+                <div class="clients-badge">CLIENT KAMI:</div>
+                <div class="clients-list">
+                    <ul>
+                        <li><span>PT. SUNAN MURIA</span> - JEMBER</li>
+                        <li><span>CV. SAFARA JAYA PRAKARSA</span> - SIDOARJO</li>
+                        <li><span>CV. MEGA JAYA AMERTA</span> - SIDOARJO</li>
+                        <li><span>DPU BINA MARGA</span> PROVINSI JAWA TIMUR</li>
+                    </ul>
+                    <ul>
+                        <li><span>CV. ANUGERAH TRITUNGGAL JAYA</span> - SURABAYA</li>
+                        <li><span>CV MAGALINDO</span> - MAGETAN</li>
+                        <li><span>PT. PETOSEA</span> (FREEPORT INDONESIA GROUP)</li>
+                        <li><span>PT. TRIPALINDO TRANSMIX</span> - SURABAYA</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: PRODUCTS -->
+    <section class="products" id="produk" data-animate="fade-up">
+        <div class="container">
+            <div class="products-inner" data-animate="fade-up">
+                <div class="products-badge">
+                    <span>★★★★★</span>
+                    <span>Dipercaya klien proyek di seluruh Indonesia</span>
+                </div>
+                <h2>Solusi Produk Aspal Untuk Pengerjaan Lebih Mulus</h2>
+                <p class="products-subtitle">
+                    Formulasi emulsi kami siap pakai untuk berbagai kebutuhan konstruksi jalan, jembatan, dan bangunan. Tingkatkan kecepatan pengerjaan tanpa mengorbankan mutu lapisan.
+                </p>
+                <div class="products-cta">
+                    <a href="#hubungi" class="btn-primary">Mulai Konsultasi</a>
+                </div>
+            </div>
+
+            <div class="product-carousel">
+                <button class="product-arrow prev" aria-label="Produk sebelumnya">
+                    &#10094;
+                </button>
+                <div class="product-track-wrapper">
+                    <div class="product-track">
+                        <article class="product-card hover-glow" data-animate="tilt-up">
+                            <div class="product-icon">
+                                <img src="images/colabit-seal-coat.png" alt="Xolabit Seal Coat">
+                            </div>
+                            <div class="card-content product-content">
+                                <h3>Xolabit Seal Coat</h3>
+                                <p>Lapisan pelindung kedap air yang menjaga dek beton dan permukaan atap tetap awet, bersih, dan bebas retak.</p>
+                                <a href="#" class="product-link">Lihat detail</a>
+                            </div>
+                        </article>
+
+                        <article class="product-card hover-glow" data-animate="tilt-up" data-animate-delay="120">
+                            <div class="product-icon">
+                                <img src="images/xolabit-bitumen.png" alt="Xolabit Bitumen">
+                            </div>
+                            <div class="card-content product-content">
+                                <h3>Xolabit Bitumen</h3>
+                                <p>Bitumen premium dengan adhesi tinggi untuk konstruksi jalan dan struktur yang membutuhkan daya rekat maksimal.</p>
+                                <a href="#" class="product-link">Lihat detail</a>
+                            </div>
+                        </article>
+
+                        <article class="product-card hover-glow" data-animate="tilt-up" data-animate-delay="180">
+                            <div class="product-icon">
+                                <img src="images/asphaltic-plug.png" alt="Asphaltic Plug">
+                            </div>
+                            <div class="card-content product-content">
+                                <h3>Asphaltic Plug</h3>
+                                <p>Sistem sambungan ekspansi yang fleksibel dan tahan beban berat, cocok untuk jembatan dan akses industri.</p>
+                                <a href="#" class="product-link">Lihat detail</a>
+                            </div>
+                        </article>
+
+                        <article class="product-card hover-glow" data-animate="tilt-up" data-animate-delay="240">
+                            <div class="product-icon">
+                                <img src="images/aspal-membran.png" alt="Aspal Membran">
+                            </div>
+                            <div class="card-content product-content">
+                                <h3>Aspal Membran</h3>
+                                <p>Membran torch-on dengan daya tahan tinggi untuk proteksi struktur beton terhadap kelembapan dan retak.</p>
+                                <a href="#" class="product-link">Lihat detail</a>
+                            </div>
+                        </article>
+
+                        <article class="product-card hover-glow" data-animate="tilt-up" data-animate-delay="300">
+                            <div class="product-icon">
+                                <img src="images/aspal-dingin-cold-mix.png" alt="Slurry Seal Mix">
+                            </div>
+                            <div class="card-content product-content">
+                                <h3>Slurry Seal Mix</h3>
+                                <p>Campuran slurry siap pakai untuk rejuvenasi permukaan jalan dengan hasil halus dan tahan lama.</p>
+                                <a href="#" class="product-link">Lihat detail</a>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <button class="product-arrow next" aria-label="Produk selanjutnya">
+                    &#10095;
+                </button>
+            </div>
+
+            <div class="card-content ecommerce-links">
+                <span style="font-size: 24px; font-weight: 600;">Produk kami tersedia di e-commerce |</span>
+                <a href="#" class="ecommerce-icon"><img class="icon-ecommerce" src="images/Shopee.svg.png" alt="Shopee"></a>
+                <a href="#" class="ecommerce-icon"><img class="icon-ecommerce" src="images/tokopedia-38840.png" alt="Tokopedia"></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 7: GALLERY -->
+    <section class="gallery" id="galeri" data-animate="fade-up">
+        <div class="container">
+            <div class="gallery-head">
+                <div class="gallery-badge">Project Highlight</div>
+                <h2 class="gallery-title">Gallery Pengerjaan</h2>
+                <p class="gallery-intro">
+                    Pengerjaan dilakukan dengan standar keamanan, menggunakan bahan baku berkualitas dan tenaga kerja berpengalaman,
+                    sehingga menghasilkan lapisan yang kuat, teruji, dan tahan lama.
+                </p>
+            </div>
+
+            <div class="gallery-carousel">
+                <button class="gallery-arrow prev" aria-label="Galeri sebelumnya">&#10094;</button>
+                <div class="gallery-track-wrapper">
+                    <div class="gallery-track">
+                        <article class="gallery-card hover-glow" data-animate="rise">
+                            <figure class="gallery-media">
+                                <img src="images/galeri1.jpeg" alt="Proyek pengaspalan area Jawa Timur">
+                            </figure>
+                            <div class="gallery-content">
+                                <h3>Proyek Area Jawa Timur</h3>
+                                <p>Pengaspalan jalan raya dan jembatan CV. Safara Jaya Prakarsa dengan finishing halus dan teruji.</p>
+                            </div>
+                        </article>
+
+                        <article class="gallery-card hover-glow" data-animate="rise" data-animate-delay="80">
+                            <figure class="gallery-media">
+                                <img src="images/galeri2.jpeg" alt="Waterproofing gedung bertingkat">
+                            </figure>
+                            <div class="gallery-content">
+                                <h3>Waterproofing Gedung Bertingkat</h3>
+                                <p>Penerapan membran torch-on pada dak beton untuk proteksi jangka panjang dari kebocoran.</p>
+                            </div>
+                        </article>
+
+                        <article class="gallery-card hover-glow" data-animate="rise" data-animate-delay="140">
+                            <figure class="gallery-media">
+                                <img src="images/galeri3.jpeg" alt="Slurry seal perumahan">
+                            </figure>
+                            <div class="gallery-content">
+                                <h3>Slurry Seal Kawasan Perumahan</h3>
+                                <p>Penyegaran permukaan jalan lingkungan dengan campuran slurry agar lebih rapi dan aman.</p>
+                            </div>
+                        </article>
+
+                        <article class="gallery-card hover-glow" data-animate="rise" data-animate-delay="200">
+                            <figure class="gallery-media">
+                                <img src="images/galeri4.jpeg" alt="Perbaikan akses industri">
+                            </figure>
+                            <div class="gallery-content">
+                                <h3>Perbaikan Akses Industri</h3>
+                                <p>Pemakaian asphaltic plug untuk sambungan ekspansi gudang logistik dengan lalu lintas berat.</p>
+                            </div>
+                        </article>
+
+                        <article class="gallery-card hover-glow" data-animate="rise" data-animate-delay="260">
+                            <figure class="gallery-media">
+                                <img src="images/galeri5.jpeg" alt="Aspal emulsi kampus negeri">
+                            </figure>
+                            <div class="gallery-content">
+                                <h3>Aspal Emulsi Kampus Negeri</h3>
+                                <p>Pelapisan ulang akses kampus dengan emulsi dingin agar aman di segala cuaca.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <button class="gallery-arrow next" aria-label="Galeri selanjutnya">&#10095;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: CTA / COVERAGE -->
+    <section class="cta" id="hubungi" data-animate="fade-up" style="background-image: url('images/efek-bintang.png');">
+        <div class="container">
+            <div class="cta-inner" data-animate="fade-up">
+                <span class="cta-badge">Siap bersinergi</span>
+                <h2 class="cta-title">Percayakan Ke-Ahlinya!</h2>
+                <p class="cta-text">
+                    Telah menyelesaikan puluhan proyek dan ribuan pesanan dengan hasil kuat, tahan lama, dan terpercaya. 
+                    Hubungi kami untuk konsultasi pengerjaan, atau checkout produk langsung melalui e-commerce kami.
+                </p>
+                <div class="cta-actions">
+                    <a href="#hubungi" class="btn-primary">Hubungi Kami</a>
+                    <a href="#galeri" class="btn-secondary">Lihat Portofolio</a>
+                </div>
+
+                <div class="" style="margin-top: -200px;">
+                    <div class="cta-glow"></div>
+                    <img src="images/peta-indo.png" alt="Peta Indonesia" width="100%">
+                </div>
+                <p class="coverage-text" style="    margin-top: -136px; text-align: center;">Pengiriman &amp; Pengerjaan Seluruh Indonesia</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: BLOG INSIGHTS -->
+    <section class="blog" id="blog" data-animate="fade-up">
+        <div class="container">
+            <div class="blog-head" data-animate="fade-up">
+                <span class="blog-kicker">Wawasan Lapangan</span>
+                <h2>Insight Teknis & Tips dari Kami</h2>
+                <p>
+                    Update terbaru dari tim engineer kami seputar teknologi emulsi, manajemen pemeliharaan jalan,
+                    serta strategi efisiensi supaya proyek kamu lebih presisi dan mudah di-maintain.
+                </p>
+            </div>
+
+            <div class="blog-grid">
+                <article class="blog-card hover-glow" data-animate="tilt-up">
+                    <div class="blog-media">
+                        <img src="images/blog-emulsi.jpg" alt="Teknisi memeriksa kualitas aspal emulsi">
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Teknologi</span>
+                        <h3>Formula Emulsi Generasi Baru Untuk Curah Hujan Tinggi</h3>
+                        <p>
+                            Bagaimana kombinasi lateks dan bitumen termodifikasi menjaga durabilitas jalur logistik
+                            di area dengan intensitas hujan ekstrem.
+                        </p>
+                        <div class="blog-meta">
+                            <span>4 Mei 2025</span>
+                            <span>6 menit baca</span>
+                        </div>
+                        <a class="blog-link" href="#">Baca artikel →</a>
+                    </div>
+                </article>
+
+                <article class="blog-card hover-glow" data-animate="tilt-up" data-animate-delay="120">
+                    <div class="blog-media">
+                        <img src="images/blog-pemeliharaan.jpg" alt="Pekerja melakukan perawatan jalan kota">
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Perawatan</span>
+                        <h3>Checklist Pemeliharaan Jalan Kampus Dalam 48 Jam</h3>
+                        <p>
+                            SOP ringkas untuk tim internal kampus agar crack kecil nggak berkembang jadi kerusakan besar.
+                        </p>
+                        <div class="blog-meta">
+                            <span>27 April 2025</span>
+                            <span>4 menit baca</span>
+                        </div>
+                        <a class="blog-link" href="#">Baca artikel →</a>
+                    </div>
+                </article>
+
+                <article class="blog-card hover-glow" data-animate="tilt-up" data-animate-delay="200">
+                    <div class="blog-media">
+                        <img src="images/blog-planning.jpg" alt="Tim project review blueprint perkerasan">
+                    </div>
+                    <div class="blog-content">
+                        <span class="blog-tag">Project</span>
+                        <h3>Studi Kasus: Upgrade Runway Industri Dengan Slurry Seal</h3>
+                        <p>
+                            Cerita implementasi di pabrik otomotif Jawa Timur yang sukses memangkas downtime 30%.
+                        </p>
+                        <div class="blog-meta">
+                            <span>19 April 2025</span>
+                            <span>8 menit baca</span>
+                        </div>
+                        <a class="blog-link" href="#">Baca artikel →</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 10: TESTIMONIALS -->
+    <section class="testimonials" id="testimoni" data-animate="fade-up">
+        <div class="container">
+            <div class="testimonials-head" data-animate="fade-up">
+                <span class="testimonials-kicker">Suara Klien</span>
+                <h2>Partner Kami Bicara Soal Hasil Akhir</h2>
+                <p>
+                    Dari akses kampus, kawasan industri sampai jalur logistik, mereka percaya sama kualitas layer dan
+                    servis aftersales kami.
+                </p>
+            </div>
+
+            <div class="testimonials-carousel">
+                <button class="testi-arrow prev" aria-label="Testimoni sebelumnya">&#10094;</button>
+                <div class="testi-track-wrapper">
+                    <div class="testi-track">
+                        <article class="testi-card hover-glow" data-animate="tilt-up">
+                            <div class="testi-rating">★★★★★</div>
+                            <p class="testi-quote">
+                                “Durasi shutdown pabrik cuma 48 jam, hasil slurry seal-nya mulus dan anti slip. Support
+                                teknisnya responsif banget.”
+                            </p>
+                            <div class="testi-author">
+                                <img src="images/testi-1.jpg" alt="Foto klien">
+                                <div>
+                                    <h4>Andri Wibisono</h4>
+                                    <span>Facility Manager, PT Tripalindo Transmix</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="testi-card hover-glow" data-animate="tilt-up" data-animate-delay="120">
+                            <div class="testi-rating">★★★★★</div>
+                            <p class="testi-quote">
+                                “Proyek waterproofing 12.000 m² selesai sesuai timeline, tim QC mereka detail banget
+                                ngasih laporan harian.”
+                            </p>
+                            <div class="testi-author">
+                                <img src="images/testi-2.jpg" alt="Foto klien">
+                                <div>
+                                    <h4>Rizka Nuraini</h4>
+                                    <span>Procurement, DPU Bina Marga Jatim</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="testi-card hover-glow" data-animate="tilt-up" data-animate-delay="200">
+                            <div class="testi-rating">★★★★☆</div>
+                            <p class="testi-quote">
+                                “Vendor paling fleksibel buat variasi emulsi. Kalau ada revisi desain, mereka langsung
+                                adjust di batch berikutnya.”
+                            </p>
+                            <div class="testi-author">
+                                <img src="images/testi-3.jpg" alt="Foto klien">
+                                <div>
+                                    <h4>Hendra Kusuma</h4>
+                                    <span>Project Lead, CV Mega Jaya Amerta</span>
+                                </div>
+                            </div>
+                        </article>
+
+                        <article class="testi-card hover-glow" data-animate="tilt-up" data-animate-delay="200">
+                            <div class="testi-rating">★★★★☆</div>
+                            <p class="testi-quote">
+                                “Vendor paling fleksibel buat variasi emulsi. Kalau ada revisi desain, mereka langsung
+                                adjust di batch berikutnya.”
+                            </p>
+                            <div class="testi-author">
+                                <img src="images/testi-3.jpg" alt="Foto klien">
+                                <div>
+                                    <h4>Hendra Kusuma</h4>
+                                    <span>Project Lead, CV Mega Jaya Amerta</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <button class="testi-arrow next" aria-label="Testimoni selanjutnya">&#10095;</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="nav-overlay"></div>
+    <!-- SECTION 9: FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <span class="footer-badge"><img src="images/logo.png" alt="ASPAL EMULSI TECHNO.COM" width="300px"></span>
+                    <h3 class="footer-title">PT Aspal Emulsi Techno</h3>
+                    <p class="footer-text">
+                        Mitra aspal emulsi dingin dan panas untuk proyek jalan, kawasan industri, hingga fasilitas kampus.
+                        Formulasi presisi, pengiriman cepat, dan dukungan teknis full service.
+                    </p>
+                    <div class="footer-social">
+                        <a class="social-pill" href="#">
+                            <span class="social-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" role="img">
+                                    <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zm5 3a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6zm6.5-3a1.5 1.5 0 1 0 0 3a1.5 1.5 0 0 0 0-3z" />
+                                </svg>
+                            </span>
+                            <span>Instagram</span>
+                        </a>
+                        <a class="social-pill" href="#">
+                            <span class="social-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" role="img">
+                                    <path d="M16 2h-3.5v12.6a2.2 2.2 0 0 1-4.4 0a2.2 2.2 0 0 1 3.3-1.9V8.1a5.6 5.6 0 0 0-2.4-.54A5.6 5.6 0 0 0 3.9 13.2a5.6 5.6 0 0 0 11.2 0V7.5a8 8 0 0 0 4.9 1.64V5.9a4.6 4.6 0 0 1-4.9-3.9z" />
+                                </svg>
+                            </span>
+                            <span>TikTok</span>
+                        </a>
+                        <a class="social-pill" href="#">
+                            <span class="social-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" role="img">
+                                    <path d="M20.52 3.48A11.793 11.793 0 0 0 12 0C5.373 0 0 5.373 0 12c0 2.116.555 4.186 1.608 6.007L0 24l6.182-1.581A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12 0-3.197-1.246-6.206-3.48-8.52zM12 22.125a10.07 10.07 0 0 1-5.143-1.409l-.368-.217-3.675.94.982-3.584-.24-.368A10.11 10.11 0 0 1 1.875 12c0-5.603 4.522-10.125 10.125-10.125S22.125 6.397 22.125 12 17.603 22.125 12 22.125z" />
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.672.15-.198.297-.769.966-.941 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.447-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.672-1.612-.921-2.207-.242-.58-.487-.501-.672-.51-.173-.008-.371-.01-.57-.01-.199 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.199 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.718 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                                </svg>
+                            </span>
+                            <span>WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Jelajah Cepat</h4>
+                    <ul>
+                        <li><a href="#beranda">Beranda</a></li>
+                        <li><a href="#layanan">Layanan</a></li>
+                        <li><a href="#produk">Produk</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#testimoni">Testimoni</a></li>
+                        <li><a href="#galeri">Portofolio</a></li>
+                        <li><a href="#hubungi">Hubungi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Kontak</h4>
+                    <ul>
+                        <li><span>Hotline</span> +62 812-3456-7890</li>
+                        <li><span>Email</span> support@aspalemulsi.com</li>
+                        <li><span>Workshop</span> Jl. Industri Raya No. 18, Bekasi</li>
+                        <li><span>Jam Operasional</span> Senin - Sabtu, 08.00 - 20.00 WIB</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-meta">
+                <p>©2025 HVM Digital ID. All rights reserved.</p>
+                <div class="footer-policy">
+                    <a href="#">Kebijakan Privasi</a>
+                    <a href="#">Syarat Layanan</a>
+                    <a href="#">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="floating-actions" aria-label="Kontak cepat" data-animate="fade-left">
+        <a class="floating-btn floating-btn--whatsapp" href="https://wa.me/6281234567890" target="_blank" rel="noopener" aria-label="Hubungi via WhatsApp">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.672.15-.198.297-.769.966-.941 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.447-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.672-1.612-.921-2.207-.242-.58-.487-.501-.672-.51-.173-.008-.371-.01-.57-.01-.199 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.199 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.718 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"></path>
+                <path d="M20.52 3.48A11.793 11.793 0 0 0 12 0C5.373 0 0 5.373 0 12c0 2.116.555 4.186 1.608 6.007L0 24l6.182-1.581A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12 0-3.197-1.246-6.206-3.48-8.52zM12 22.125a10.07 10.07 0 0 1-5.143-1.409l-.368-.217-3.675.94.982-3.584-.24-.368A10.11 10.11 0 0 1 1.875 12c0-5.603 4.522-10.125 10.125-10.125S22.125 6.397 22.125 12 17.603 22.125 12 22.125z"></path>
+            </svg>
+        </a>
+        <a class="floating-btn floating-btn--shopee" href="https://shopee.co.id" target="_blank" rel="noopener" aria-label="Belanja di Shopee">
+            <span class="floating-label">S</span>
+        </a>
+        <a class="floating-btn floating-btn--tokopedia" href="https://tokopedia.com" target="_blank" rel="noopener" aria-label="Belanja di Tokopedia">
+            <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+                <path d="M60 0C26.863 0 0 26.863 0 60s26.863 60 60 60 60-26.863 60-60S93.137 0 60 0z" fill="currentColor"></path>
+                <path d="M82.5 48.75c-5.062-6.563-12.938-10.313-22.5-10.313s-17.438 3.75-22.5 10.313L30 45l3.75 33.75c1.875 16.875 24.375 18.75 26.25 18.75s24.375-1.875 26.25-18.75L90 45l-7.5 3.75zM52.5 63.75c0 3.75-3.75 6.563-7.5 6.563s-7.5-2.813-7.5-6.563 3.75-6.563 7.5-6.563 7.5 2.813 7.5 6.563zm30 0c0 3.75-3.75 6.563-7.5 6.563s-7.5-2.813-7.5-6.563 3.75-6.563 7.5-6.563 7.5 2.813 7.5 6.563z" fill="#fff"></path>
+            </svg>
+        </a>
+        <button class="floating-btn floating-btn--top" type="button" aria-label="Kembali ke atas">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path d="M12 5l7 7H5z"></path>
+            </svg>
+        </button>
+    </div>
+    <script src="animations.js" defer></script>
+</body>
+</html>
+
