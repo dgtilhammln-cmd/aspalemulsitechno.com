@@ -136,6 +136,10 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
                 <input type="tel" id="leadInputPhone" required placeholder="Contoh: 081234567890">
             </div>
             <div class="lead-form-group">
+                <label for="leadInputKota">Kota / Lokasi Proyek <span style="color:#ef4444;">*</span></label>
+                <input type="text" id="leadInputKota" required placeholder="Contoh: Jakarta, Surabaya, Bandung...">
+            </div>
+            <div class="lead-form-group">
                 <label for="leadInputNeeds">Kebutuhan Proyek / Produk <span style="color:#ef4444;">*</span></label>
                 <textarea id="leadInputNeeds" rows="3" required placeholder="Contoh: Butuh aspal emulsi 10 drum untuk perbaikan jalan..."></textarea>
             </div>
@@ -285,95 +289,133 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
 
 <script>
 (function() {
-    var btnOpen = document.getElementById('btnFloatingWhatsApp');
-    var modal = document.getElementById('waLeadModal');
-    var btnClose = document.getElementById('btnCloseLeadModal');
-    var form = document.getElementById('formWaLeadTracker');
+    var modal     = document.getElementById('waLeadModal');
+    var btnClose  = document.getElementById('btnCloseLeadModal');
+    var form      = document.getElementById('formWaLeadTracker');
     var btnSubmit = document.getElementById('btnSubmitLeadForm');
-    var targetWa = '<?= $cleanWaNumber ?>';
+    var targetWa  = '<?= $cleanWaNumber ?>';
 
-    if (btnOpen && modal) {
-        btnOpen.addEventListener('click', function(e) {
-            e.preventDefault();
-            modal.style.display = 'flex';
-            modal.setAttribute('aria-hidden', 'false');
-            var firstInput = document.getElementById('leadInputName');
-            if (firstInput) setTimeout(function() { firstInput.focus(); }, 100);
-        });
+    // Destinasi WA yang akan dibuka setelah form diisi
+    var pendingWaUrl = '';
+
+    // ── Fungsi buka modal ─────────────────────────────────────────────────
+    function openModal(pendingUrl) {
+        if (!modal) return;
+        pendingWaUrl = pendingUrl || '';
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+        var firstInput = document.getElementById('leadInputName');
+        if (firstInput) setTimeout(function() { firstInput.focus(); }, 80);
     }
 
+    // ── Fungsi tutup modal ────────────────────────────────────────────────
     function closeModal() {
         if (!modal) return;
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
     }
 
-    if (btnClose) {
-        btnClose.addEventListener('click', closeModal);
+    // ── Floating WA button ────────────────────────────────────────────────
+    var btnOpen = document.getElementById('btnFloatingWhatsApp');
+    if (btnOpen) {
+        btnOpen.addEventListener('click', function(e) {
+            e.preventDefault();
+            openModal('');
+        });
     }
+
+    // ── GLOBAL INTERCEPTOR: Tangkap SEMUA klik link wa.me di halaman ─────
+    function interceptAllWaLinks() {
+        document.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp.com/send"], a[href*="api.whatsapp.com"]').forEach(function(link) {
+            if (link.dataset.waIntercepted) return;
+            link.dataset.waIntercepted = '1';
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openModal(this.href);
+            });
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', interceptAllWaLinks);
+    } else {
+        interceptAllWaLinks();
+    }
+    setTimeout(interceptAllWaLinks, 1500);
+
+    // ── Tutup modal ───────────────────────────────────────────────────────
+    if (btnClose) btnClose.addEventListener('click', closeModal);
     if (modal) {
         modal.addEventListener('click', function(e) {
             if (e.target === modal) closeModal();
         });
     }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
 
+    // ── Submit Form ───────────────────────────────────────────────────────
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            var name = (document.getElementById('leadInputName').value || '').trim();
+            var name  = (document.getElementById('leadInputName').value  || '').trim();
             var phone = (document.getElementById('leadInputPhone').value || '').trim();
+            var kota  = (document.getElementById('leadInputKota').value  || '').trim();
             var needs = (document.getElementById('leadInputNeeds').value || '').trim();
 
-            if (!name || !phone) return;
+            if (!name || !phone || !kota) {
+                ['leadInputName','leadInputPhone','leadInputKota','leadInputNeeds'].forEach(function(id) {
+                    var el = document.getElementById(id);
+                    if (el && !el.value.trim()) {
+                        el.style.borderColor = '#ef4444';
+                        el.addEventListener('input', function() { el.style.borderColor = ''; }, { once: true });
+                    }
+                });
+                return;
+            }
 
             btnSubmit.disabled = true;
-            btnSubmit.innerHTML = '<span>Menyimpan & Mengalihkan...</span>';
+            btnSubmit.textContent = 'Menyimpan & Mengalihkan...';
 
-            // Ekstrak data UTM & Referrer dari browser
-            var urlParams = new URLSearchParams(window.location.search);
-            var utmSource = urlParams.get('utm_source') || '';
-            var utmMedium = urlParams.get('utm_medium') || '';
+            var urlParams   = new URLSearchParams(window.location.search);
+            var utmSource   = urlParams.get('utm_source')   || '';
+            var utmMedium   = urlParams.get('utm_medium')   || '';
             var utmCampaign = urlParams.get('utm_campaign') || '';
-            var utmTerm = urlParams.get('utm_term') || '';
-            var utmContent = urlParams.get('utm_content') || '';
-            var referrer = document.referrer || '';
+            var utmTerm     = urlParams.get('utm_term')     || '';
+            var utmContent  = urlParams.get('utm_content')  || '';
+            var referrer    = document.referrer || '';
 
-            // Kirim tracking lead ke backend
             try {
                 fetch('/api/track/lead', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        name: name,
-                        phone: phone,
-                        needs: needs,
-                        source: 'floating_wa_modal',
-                        utm_source: utmSource,
-                        utm_medium: utmMedium,
-                        utm_campaign: utmCampaign,
-                        utm_term: utmTerm,
-                        utm_content: utmContent,
-                        referrer: referrer,
-                        page_url: window.location.href
+                        name: name, phone: phone, kota: kota, needs: needs,
+                        source: pendingWaUrl ? 'wa_link_intercept' : 'floating_wa_modal',
+                        utm_source: utmSource, utm_medium: utmMedium, utm_campaign: utmCampaign,
+                        utm_term: utmTerm, utm_content: utmContent,
+                        referrer: referrer, page_url: window.location.href
                     })
                 }).catch(function() {});
             } catch (err) {}
 
-            // Format template pesan WhatsApp
             var msg = 'Halo tim Aspal Emulsi Techno,\n' +
-                      'Saya ingin konsultasi penawaran:\n\n' +
-                      '• *Nama:* ' + name + '\n' +
-                      '• *No. WhatsApp:* ' + phone + '\n' +
-                      '• *Kebutuhan:* ' + needs + '\n\n' +
+                      'Saya mendapatkan kontak dari *aspalemulsitechno.com* dan ingin konsultasi penawaran:\n\n' +
+                      '\u2022 *Nama:* ' + name + '\n' +
+                      '\u2022 *No. WhatsApp:* ' + phone + '\n' +
+                      '\u2022 *Kota / Lokasi:* ' + kota + '\n' +
+                      '\u2022 *Kebutuhan:* ' + needs + '\n\n' +
                       'Mohon info penawaran harga & spesifikasi lengkapnya. Terima kasih!';
 
-            var waLink = 'https://wa.me/' + targetWa + '?text=' + encodeURIComponent(msg);
+            var baseWaUrl  = pendingWaUrl ? pendingWaUrl.split('?')[0] : ('https://wa.me/' + targetWa);
+            var finalUrl   = baseWaUrl + '?text=' + encodeURIComponent(msg);
 
-            // Buka WhatsApp
             setTimeout(function() {
-                window.open(waLink, '_blank');
+                window.open(finalUrl, '_blank');
                 closeModal();
                 form.reset();
+                pendingWaUrl = '';
                 btnSubmit.disabled = false;
                 btnSubmit.innerHTML = '<span>Mulai Chat Sekarang</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
             }, 300);
