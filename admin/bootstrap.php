@@ -802,10 +802,11 @@ function adminSendPasswordResetEmail(string $email, string $token): bool
 
 function adminAnalyticsResolveRange(array $query): array
 {
-    $mode = strtolower(trim((string) ($query['range'] ?? '7d')));
+    $mode = strtolower(trim((string) ($query['range'] ?? '30d')));
     $now = new DateTimeImmutable('now', new DateTimeZone('Asia/Jakarta'));
     $end = $now;
-    $label = '7 Hari Terakhir';
+    $label = '30 Hari Terakhir';
+    $start = $now->modify('-29 day')->setTime(0, 0, 0);
 
     switch ($mode) {
         case 'today':
@@ -824,8 +825,10 @@ function adminAnalyticsResolveRange(array $query): array
             $mode = '7d';
             break;
         case '30d':
+        case '30days':
             $start = $now->modify('-29 day')->setTime(0, 0, 0);
             $label = '30 Hari Terakhir';
+            $mode = '30d';
             break;
         case '90d':
             $start = $now->modify('-89 day')->setTime(0, 0, 0);
