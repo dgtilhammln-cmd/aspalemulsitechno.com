@@ -28,5 +28,6 @@ $router->get('/produk/{slug}', [ProductController::class, 'show']);
 $router->get('/sitemap.xml', [SitemapController::class, 'index']);
 $router->post('/api/track/product-click', [AnalyticsController::class, 'logProductClick']);
 $router->post('/api/track/marketplace-click', [AnalyticsController::class, 'logMarketplaceClick']);
+$router->post('/api/track/lead', [AnalyticsController::class, 'logLead']);
 
 $router->dispatch($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['REQUEST_URI'] ?? '/');

@@ -94,29 +94,274 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
 <div class="floating-actions" aria-label="Kontak cepat" data-animate="fade-left">
     <?php
     $floatingWhatsapp = $settings['whatsapp_number'] ?? ($settings['whatsapp_url'] ?? null);
-    $floatingWhatsappUrl = $floatingWhatsapp ? 'https://wa.me/' . preg_replace('/\D+/', '', (string) $floatingWhatsapp) : '#';
-    if ($floatingWhatsappUrl && $floatingWhatsappUrl !== '#') {
-        $waSeparator = str_contains($floatingWhatsappUrl, '?') ? '&' : '?';
-        $floatingWhatsappUrl .= $waSeparator . 'text=' . rawurlencode('Halo tim Aspal Emulsi Techno.');
+    $cleanWaNumber = preg_replace('/\D+/', '', (string) ($floatingWhatsapp ?: '6281234567890'));
+    if (!str_starts_with($cleanWaNumber, '62') && str_starts_with($cleanWaNumber, '0')) {
+        $cleanWaNumber = '62' . substr($cleanWaNumber, 1);
     }
     ?>
-    <?php if ($floatingWhatsappUrl && $floatingWhatsappUrl !== '#'): ?>
-        <a class="floating-btn floating-btn--whatsapp" href="<?= e($floatingWhatsappUrl) ?>" target="_blank" rel="noopener" aria-label="Hubungi via WhatsApp" data-market-channel="whatsapp" data-market-context="global-floating">
-            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.672.15-.198.297-.769.966-.941 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.447-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.672-1.612-.921-2.207-.242-.58-.487-.501-.672-.51-.173-.008-.371-.01-.57-.01-.199 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.199 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.718 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"></path>
-                <path d="M20.52 3.48A11.793 11.793 0 0 0 12 0C5.373 0 0 5.373 0 12c0 2.116.555 4.186 1.608 6.007L0 24l6.182-1.581A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12 0-3.197-1.246-6.206-3.48-8.52zM12 22.125a10.07 10.07 0 0 1-5.143-1.409l-.368-.217-3.675.94.982-3.584-.24-.368A10.11 10.11 0 0 1 1.875 12c0-5.603 4.522-10.125 10.125-10.125S22.125 6.397 22.125 12 17.603 22.125 12 22.125z"></path>
-            </svg>
-        </a>
-    <?php endif; ?>
-    <a class="floating-btn floating-btn--shopee" href="<?= e($settings['shopee_url'] ?? 'https://shopee.co.id') ?>" target="_blank" rel="noopener" aria-label="Belanja di Shopee" data-market-channel="shopee" data-market-context="global-floating">
-        <img src="<?= asset('images/shopee-circle.webp') ?>" alt="Shopee" class="floating-icon-image">
-    </a>
-    <a class="floating-btn floating-btn--tokopedia" href="<?= e($settings['tokopedia_url'] ?? 'https://tokopedia.com') ?>" target="_blank" rel="noopener" aria-label="Belanja di Tokopedia" data-market-channel="tokopedia" data-market-context="global-floating">
-        <img src="<?= asset('images/tokopedia-icon-png-7.png') ?>" alt="Tokopedia" class="floating-icon-image">
-    </a>
+    <button type="button" class="floating-btn floating-btn--whatsapp" id="btnFloatingWhatsApp" aria-label="Konsultasi WhatsApp">
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.672.15-.198.297-.769.966-.941 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.447-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.672-1.612-.921-2.207-.242-.58-.487-.501-.672-.51-.173-.008-.371-.01-.57-.01-.199 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.199 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.718 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"></path>
+            <path d="M20.52 3.48A11.793 11.793 0 0 0 12 0C5.373 0 0 5.373 0 12c0 2.116.555 4.186 1.608 6.007L0 24l6.182-1.581A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12 0-3.197-1.246-6.206-3.48-8.52zM12 22.125a10.07 10.07 0 0 1-5.143-1.409l-.368-.217-3.675.94.982-3.584-.24-.368A10.11 10.11 0 0 1 1.875 12c0-5.603 4.522-10.125 10.125-10.125S22.125 6.397 22.125 12 17.603 22.125 12 22.125z"></path>
+        </svg>
+    </button>
     <button class="floating-btn floating-btn--top" type="button" aria-label="Kembali ke atas">
         <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
             <path d="M12 5l7 7H5z"></path>
         </svg>
     </button>
 </div>
+
+<!-- Modal Pop Up Lead Tracker WhatsApp -->
+<div id="waLeadModal" class="lead-modal-backdrop" aria-hidden="true" style="display:none;">
+    <div class="lead-modal-card">
+        <button type="button" class="lead-modal-close" id="btnCloseLeadModal" aria-label="Tutup">&times;</button>
+        <div class="lead-modal-head">
+            <div class="lead-modal-icon-badge">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="30" height="30">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.672.15-.198.297-.769.966-.941 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.447-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.672-1.612-.921-2.207-.242-.58-.487-.501-.672-.51-.173-.008-.371-.01-.57-.01-.199 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.199 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.226 1.36.194 1.872.118.571-.085 1.758-.718 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                    <path d="M20.52 3.48A11.793 11.793 0 0 0 12 0C5.373 0 0 5.373 0 12c0 2.116.555 4.186 1.608 6.007L0 24l6.182-1.581A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12 0-3.197-1.246-6.206-3.48-8.52zM12 22.125a10.07 10.07 0 0 1-5.143-1.409l-.368-.217-3.675.94.982-3.584-.24-.368A10.11 10.11 0 0 1 1.875 12c0-5.603 4.522-10.125 10.125-10.125S22.125 6.397 22.125 12 17.603 22.125 12 22.125z"/>
+                </svg>
+            </div>
+            <h3 class="lead-modal-title">Konsultasi via WhatsApp</h3>
+            <p class="lead-modal-desc">Isi form singkat di bawah ini untuk langsung terhubung dengan tim teknis kami.</p>
+        </div>
+        <form id="formWaLeadTracker" class="lead-modal-body">
+            <div class="lead-form-group">
+                <label for="leadInputName">Nama Lengkap <span style="color:#ef4444;">*</span></label>
+                <input type="text" id="leadInputName" required placeholder="Nama Anda / Perusahaan">
+            </div>
+            <div class="lead-form-group">
+                <label for="leadInputPhone">Nomor WhatsApp <span style="color:#ef4444;">*</span></label>
+                <input type="tel" id="leadInputPhone" required placeholder="Contoh: 081234567890">
+            </div>
+            <div class="lead-form-group">
+                <label for="leadInputNeeds">Kebutuhan Proyek / Produk <span style="color:#ef4444;">*</span></label>
+                <textarea id="leadInputNeeds" rows="3" required placeholder="Contoh: Butuh aspal emulsi 10 drum untuk perbaikan jalan..."></textarea>
+            </div>
+            <button type="submit" class="lead-btn-submit" id="btnSubmitLeadForm">
+                <span>Mulai Chat Sekarang</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+        </form>
+    </div>
+</div>
+
+<style>
+.lead-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: leadModalFadeIn 0.25s ease-out;
+}
+@keyframes leadModalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.lead-modal-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 440px;
+    border-radius: 20px;
+    padding: 28px 24px 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    position: relative;
+    animation: leadModalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    color: #1e293b;
+    box-sizing: border-box;
+}
+@keyframes leadModalSlideUp {
+    from { transform: translateY(20px) scale(0.96); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+.lead-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+.lead-modal-close:hover {
+    color: #0f172a;
+}
+.lead-modal-head {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.lead-modal-icon-badge {
+    width: 58px;
+    height: 58px;
+    background: #25d366;
+    color: #ffffff;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 16px rgba(37, 211, 102, 0.35);
+}
+.lead-modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 6px;
+}
+.lead-modal-desc {
+    font-size: 0.88rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.45;
+}
+.lead-form-group {
+    margin-bottom: 14px;
+    text-align: left;
+}
+.lead-form-group label {
+    display: block;
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 6px;
+}
+.lead-form-group input,
+.lead-form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    color: #0f172a;
+    background: #f8fafc;
+    box-sizing: border-box;
+    transition: border-color 0.15s, background 0.15s;
+    font-family: inherit;
+}
+.lead-form-group input:focus,
+.lead-form-group textarea:focus {
+    outline: none;
+    border-color: #25d366;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.15);
+}
+.lead-btn-submit {
+    width: 100%;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.3);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+.lead-btn-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(37, 211, 102, 0.4);
+}
+.lead-btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+</style>
+
+<script>
+(function() {
+    var btnOpen = document.getElementById('btnFloatingWhatsApp');
+    var modal = document.getElementById('waLeadModal');
+    var btnClose = document.getElementById('btnCloseLeadModal');
+    var form = document.getElementById('formWaLeadTracker');
+    var btnSubmit = document.getElementById('btnSubmitLeadForm');
+    var targetWa = '<?= $cleanWaNumber ?>';
+
+    if (btnOpen && modal) {
+        btnOpen.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-hidden', 'false');
+            var firstInput = document.getElementById('leadInputName');
+            if (firstInput) setTimeout(function() { firstInput.focus(); }, 100);
+        });
+    }
+
+    function closeModal() {
+        if (!modal) return;
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    if (btnClose) {
+        btnClose.addEventListener('click', closeModal);
+    }
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var name = (document.getElementById('leadInputName').value || '').trim();
+            var phone = (document.getElementById('leadInputPhone').value || '').trim();
+            var needs = (document.getElementById('leadInputNeeds').value || '').trim();
+
+            if (!name || !phone) return;
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<span>Menyimpan & Mengalihkan...</span>';
+
+            // Kirim tracking lead ke backend
+            try {
+                fetch('/api/track/lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        phone: phone,
+                        needs: needs,
+                        source: 'floating_wa_modal'
+                    })
+                }).catch(function() {});
+            } catch (err) {}
+
+            // Format template pesan WhatsApp
+            var msg = 'Halo tim Aspal Emulsi Techno,\n' +
+                      'Saya ingin konsultasi penawaran:\n\n' +
+                      '• *Nama:* ' + name + '\n' +
+                      '• *No. WhatsApp:* ' + phone + '\n' +
+                      '• *Kebutuhan:* ' + needs + '\n\n' +
+                      'Mohon info penawaran harga & spesifikasi lengkapnya. Terima kasih!';
+
+            var waLink = 'https://wa.me/' + targetWa + '?text=' + encodeURIComponent(msg);
+
+            // Buka WhatsApp
+            setTimeout(function() {
+                window.open(waLink, '_blank');
+                closeModal();
+                form.reset();
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = '<span>Mulai Chat Sekarang</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+            }, 300);
+        });
+    }
+})();
+</script>

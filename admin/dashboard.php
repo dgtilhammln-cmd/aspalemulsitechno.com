@@ -65,38 +65,7 @@ foreach ($metrics as $metric) {
     $metricsByLabel[$metric['label']] = $metric;
 }
 
-$primaryNav = [
-    [
-        'label' => 'Overview',
-        'href' => admin_url('dashboard'),
-        'prefix' => 'OV',
-        'active' => true,
-    ],
-    [
-        'label' => 'Invoices',
-        'href' => '#',
-        'prefix' => 'IN',
-        'disabled' => true,
-    ],
-    [
-        'label' => 'Payments',
-        'href' => '#',
-        'prefix' => 'PM',
-        'disabled' => true,
-    ],
-    [
-        'label' => 'Recurring',
-        'href' => '#',
-        'prefix' => 'RC',
-        'disabled' => true,
-    ],
-    [
-        'label' => 'Checkout',
-        'href' => '#',
-        'prefix' => 'CK',
-        'disabled' => true,
-    ],
-];
+$primaryNav = [];
 
 $quickActions = [
     [

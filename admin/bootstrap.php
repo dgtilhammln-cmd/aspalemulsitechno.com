@@ -1638,5 +1638,166 @@ function adminHandleImageUpload(?array $file, string $prefix, string $uploadsDir
     return '/uploads/' . $newFilename;
 }
 
+function adminAnalyticsFetchWaveOverview(array $filters): array
+{
+    $pdo = getPDO();
+    $range = adminAnalyticsResolveRange($filters);
+    $startStr = $range['start']->format('Y-m-d 00:00:00');
+    $endStr = $range['end']->format('Y-m-d 23:59:59');
+
+    // Pastikan tabel leads ada
+    try {
+        $pdo->exec('
+            CREATE TABLE IF NOT EXISTS leads (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(150) NOT NULL,
+                phone VARCHAR(50) NOT NULL,
+                needs TEXT NULL,
+                source VARCHAR(100) DEFAULT "floating_wa",
+                ip_address VARCHAR(45) NULL,
+                user_agent VARCHAR(255) NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_leads_created (created_at)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+        ');
+    } catch (Throwable) {
+    }
+
+    // Generate tanggal berurutan
+    $currentDate = $range['start'];
+    $labels = [];
+    $displayLabels = [];
+    $dailyVisitors = [];
+    $dailyWa = [];
+    $dailyLeads = [];
+
+    while ($currentDate <= $range['end']) {
+        $key = $currentDate->format('Y-m-d');
+        $labels[] = $key;
+        $displayLabels[] = $currentDate->format('d M');
+        $dailyVisitors[$key] = 0;
+        $dailyWa[$key] = 0;
+        $dailyLeads[$key] = 0;
+        $currentDate = $currentDate->modify('+1 day');
+    }
+
+    // 1. Visitor Harian & Total
+    $totalVisitors = 0;
+    try {
+        $stmt = $pdo->prepare('
+            SELECT DATE(created_at) as dt, COUNT(*) as cnt
+            FROM content_view_events
+            WHERE created_at BETWEEN :start AND :end
+            GROUP BY DATE(created_at)
+        ');
+        $stmt->execute([':start' => $startStr, ':end' => $endStr]);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $dt = (string) $row['dt'];
+            $c = (int) $row['cnt'];
+            if (isset($dailyVisitors[$dt])) {
+                $dailyVisitors[$dt] += $c;
+            }
+            $totalVisitors += $c;
+        }
+    } catch (Throwable) {
+    }
+
+    // Fallback visitor dari klik jika content_view_events masih sepi
+    if ($totalVisitors === 0) {
+        try {
+            $stmt = $pdo->prepare('
+                SELECT DATE(created_at) as dt, COUNT(DISTINCT ip_address) as cnt
+                FROM product_click_events
+                WHERE created_at BETWEEN :start AND :end
+                GROUP BY DATE(created_at)
+            ');
+            $stmt->execute([':start' => $startStr, ':end' => $endStr]);
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $dt = (string) $row['dt'];
+                $c = (int) $row['cnt'];
+                if (isset($dailyVisitors[$dt])) {
+                    $dailyVisitors[$dt] += $c;
+                }
+                $totalVisitors += $c;
+            }
+        } catch (Throwable) {
+        }
+    }
+
+    // 2. Klik WA Harian & Total (Marketplace click WA + Product click WA)
+    $totalWa = 0;
+    try {
+        $stmt = $pdo->prepare('
+            SELECT DATE(created_at) as dt, COUNT(*) as cnt
+            FROM marketplace_click_events
+            WHERE LOWER(channel) = "whatsapp" AND created_at BETWEEN :start AND :end
+            GROUP BY DATE(created_at)
+        ');
+        $stmt->execute([':start' => $startStr, ':end' => $endStr]);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $dt = (string) $row['dt'];
+            $c = (int) $row['cnt'];
+            if (isset($dailyWa[$dt])) {
+                $dailyWa[$dt] += $c;
+            }
+            $totalWa += $c;
+        }
+
+        $stmt2 = $pdo->prepare('
+            SELECT DATE(created_at) as dt, COUNT(*) as cnt
+            FROM product_click_events
+            WHERE LOWER(cta_channel) = "whatsapp" AND created_at BETWEEN :start AND :end
+            GROUP BY DATE(created_at)
+        ');
+        $stmt2->execute([':start' => $startStr, ':end' => $endStr]);
+        while ($row = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+            $dt = (string) $row['dt'];
+            $c = (int) $row['cnt'];
+            if (isset($dailyWa[$dt])) {
+                $dailyWa[$dt] += $c;
+            }
+            $totalWa += $c;
+        }
+    } catch (Throwable) {
+    }
+
+    // 3. Leads Harian & Total
+    $totalLeads = 0;
+    try {
+        $stmt = $pdo->prepare('
+            SELECT DATE(created_at) as dt, COUNT(*) as cnt
+            FROM leads
+            WHERE created_at BETWEEN :start AND :end
+            GROUP BY DATE(created_at)
+        ');
+        $stmt->execute([':start' => $startStr, ':end' => $endStr]);
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $dt = (string) $row['dt'];
+            $c = (int) $row['cnt'];
+            if (isset($dailyLeads[$dt])) {
+                $dailyLeads[$dt] += $c;
+            }
+            $totalLeads += $c;
+        }
+    } catch (Throwable) {
+    }
+
+    return [
+        'range' => $range,
+        'totals' => [
+            'visitors' => $totalVisitors,
+            'wa' => $totalWa,
+            'leads' => $totalLeads,
+        ],
+        'chart' => [
+            'labels' => $displayLabels,
+            'visitors' => array_values($dailyVisitors),
+            'wa' => array_values($dailyWa),
+            'leads' => array_values($dailyLeads),
+        ],
+    ];
+}
+
+
 
 

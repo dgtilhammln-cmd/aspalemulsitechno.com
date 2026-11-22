@@ -848,5 +848,70 @@ final class AnalyticsRecorder
 
         return $resolved;
     }
+
+    /**
+     * @param array<string,mixed> $payload
+     */
+    public function recordLead(array $payload): bool
+    {
+        $name = $this->safeString($payload['name'] ?? '', 150);
+        $phone = $this->safeString($payload['phone'] ?? '', 50);
+        $needs = $this->safeString($payload['needs'] ?? '', 2000);
+        $source = $this->safeString($payload['source'] ?? 'floating_wa', 100);
+
+        if ($name === '' || $phone === '') {
+            return false;
+        }
+
+        $environment = $this->collectEnvironment($payload['user_agent'] ?? null);
+        $this->ensureLeadsTable();
+
+        try {
+            $stmt = $this->pdo->prepare('
+                INSERT INTO leads (name, phone, needs, source, ip_address, user_agent, created_at)
+                VALUES (:name, :phone, :needs, :source, :ip, :ua, NOW())
+            ');
+
+            return $stmt->execute([
+                ':name' => $name,
+                ':phone' => $phone,
+                ':needs' => $needs,
+                ':source' => $source,
+                ':ip' => $environment['ip'],
+                ':ua' => $environment['ua'],
+            ]);
+        } catch (Throwable $throwable) {
+            error_log('Record lead failed: ' . $throwable->getMessage());
+
+            return false;
+        }
+    }
+
+    private function ensureLeadsTable(): void
+    {
+        static $checked = false;
+        if ($checked) {
+            return;
+        }
+
+        try {
+            $this->pdo->exec('
+                CREATE TABLE IF NOT EXISTS leads (
+                    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(150) NOT NULL,
+                    phone VARCHAR(50) NOT NULL,
+                    needs TEXT NULL,
+                    source VARCHAR(100) DEFAULT "floating_wa",
+                    ip_address VARCHAR(45) NULL,
+                    user_agent VARCHAR(255) NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    INDEX idx_leads_created (created_at)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+            ');
+            $checked = true;
+        } catch (Throwable $e) {
+            error_log('Ensure leads table failed: ' . $e->getMessage());
+        }
+    }
 }
 
