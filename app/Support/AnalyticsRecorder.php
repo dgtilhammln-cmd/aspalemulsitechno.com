@@ -864,12 +864,27 @@ final class AnalyticsRecorder
         }
 
         $environment = $this->collectEnvironment($payload['user_agent'] ?? null);
+        $utm = $this->extractUtm($payload);
+
+        $utmSource = $this->safeString($payload['utm_source'] ?? ($utm['source'] ?? null), 120);
+        $utmMedium = $this->safeString($payload['utm_medium'] ?? ($utm['medium'] ?? null), 120);
+        $utmCampaign = $this->safeString($payload['utm_campaign'] ?? ($utm['campaign'] ?? null), 150);
+        $utmTerm = $this->safeString($payload['utm_term'] ?? null, 150);
+        $utmContent = $this->safeString($payload['utm_content'] ?? null, 150);
+        $referrer = $this->safeString($payload['referrer'] ?? ($_SERVER['HTTP_REFERER'] ?? null), 500);
+        $deviceType = ucfirst((string) ($environment['device_type'] ?? 'Desktop'));
+
         $this->ensureLeadsTable();
 
         try {
             $stmt = $this->pdo->prepare('
-                INSERT INTO leads (name, phone, needs, source, ip_address, user_agent, created_at)
-                VALUES (:name, :phone, :needs, :source, :ip, :ua, NOW())
+                INSERT INTO leads (
+                    name, phone, needs, source, device, ip_address, user_agent,
+                    utm_source, utm_medium, utm_campaign, utm_term, utm_content, referrer, created_at
+                ) VALUES (
+                    :name, :phone, :needs, :source, :device, :ip, :ua,
+                    :utm_source, :utm_medium, :utm_campaign, :utm_term, :utm_content, :referrer, NOW()
+                )
             ');
 
             return $stmt->execute([
@@ -877,8 +892,15 @@ final class AnalyticsRecorder
                 ':phone' => $phone,
                 ':needs' => $needs,
                 ':source' => $source,
+                ':device' => $deviceType,
                 ':ip' => $environment['ip'],
-                ':ua' => $environment['ua'],
+                ':ua' => $environment['user_agent'],
+                ':utm_source' => $utmSource,
+                ':utm_medium' => $utmMedium,
+                ':utm_campaign' => $utmCampaign,
+                ':utm_term' => $utmTerm,
+                ':utm_content' => $utmContent,
+                ':referrer' => $referrer,
             ]);
         } catch (Throwable $throwable) {
             error_log('Record lead failed: ' . $throwable->getMessage());
@@ -902,12 +924,37 @@ final class AnalyticsRecorder
                     phone VARCHAR(50) NOT NULL,
                     needs TEXT NULL,
                     source VARCHAR(100) DEFAULT "floating_wa",
+                    device VARCHAR(50) DEFAULT "Desktop",
                     ip_address VARCHAR(45) NULL,
-                    user_agent VARCHAR(255) NULL,
+                    user_agent VARCHAR(500) NULL,
+                    utm_source VARCHAR(120) NULL,
+                    utm_medium VARCHAR(120) NULL,
+                    utm_campaign VARCHAR(150) NULL,
+                    utm_term VARCHAR(150) NULL,
+                    utm_content VARCHAR(150) NULL,
+                    referrer VARCHAR(500) NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     INDEX idx_leads_created (created_at)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
             ');
+
+            // Jika tabel sudah ada dari versi sebelumnya, pastikan kolom baru ditambahkan
+            $cols = [
+                'device' => 'VARCHAR(50) DEFAULT "Desktop"',
+                'utm_source' => 'VARCHAR(120) NULL',
+                'utm_medium' => 'VARCHAR(120) NULL',
+                'utm_campaign' => 'VARCHAR(150) NULL',
+                'utm_term' => 'VARCHAR(150) NULL',
+                'utm_content' => 'VARCHAR(150) NULL',
+                'referrer' => 'VARCHAR(500) NULL',
+            ];
+            foreach ($cols as $colName => $colDef) {
+                try {
+                    $this->pdo->exec("ALTER TABLE leads ADD COLUMN {$colName} {$colDef}");
+                } catch (Throwable) {
+                }
+            }
+
             $checked = true;
         } catch (Throwable $e) {
             error_log('Ensure leads table failed: ' . $e->getMessage());

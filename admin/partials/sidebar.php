@@ -25,6 +25,12 @@ $sidebarMenu = [
         'href' => admin_url('analytics'),
     ],
     [
+        'key' => 'leads',
+        'label' => 'Leads Tracker',
+        'icon' => '<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="currentColor" d="M9 1.5a7.5 7.5 0 1 0 7.5 7.5A7.51 7.51 0 0 0 9 1.5Zm0 13.5A6 6 0 1 1 15 9a6.01 6.01 0 0 1-6 6Zm0-10.5a4.5 4.5 0 1 0 4.5 4.5A4.51 4.51 0 0 0 9 4.5Zm0 7.5A3 3 0 1 1 12 9a3 3 0 0 1-3 3Zm-.75-4.5h1.5v3h-1.5v-3Zm0-3h1.5v1.5h-1.5V6Z"/></svg>',
+        'href' => admin_url('leads'),
+    ],
+    [
         'key' => 'articles',
         'label' => 'Artikel',
         'icon' => '<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="currentColor" d="M5 2.25h8c1.24 0 2.25 1 2.25 2.25v9c0 1.24-1 2.25-2.25 2.25H5A2.25 2.25 0 0 1 2.75 13.5v-9A2.25 2.25 0 0 1 5 2.25Zm3.25 2.5a.75.75 0 0 0-1.5 0v5.5a.75.75 0 1 0 1.5 0v-5.5Zm2 .5a.75.75 0 1 0 0 1.5H12a.75.75 0 0 0 0-1.5h-1.75ZM13 9h-1.75a.75.75 0 0 0 0 1.5H13a.75.75 0 0 0 0-1.5Z"/></svg>',

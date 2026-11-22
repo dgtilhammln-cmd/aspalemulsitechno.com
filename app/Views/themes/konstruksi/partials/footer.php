@@ -329,6 +329,15 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<span>Menyimpan & Mengalihkan...</span>';
 
+            // Ekstrak data UTM & Referrer dari browser
+            var urlParams = new URLSearchParams(window.location.search);
+            var utmSource = urlParams.get('utm_source') || '';
+            var utmMedium = urlParams.get('utm_medium') || '';
+            var utmCampaign = urlParams.get('utm_campaign') || '';
+            var utmTerm = urlParams.get('utm_term') || '';
+            var utmContent = urlParams.get('utm_content') || '';
+            var referrer = document.referrer || '';
+
             // Kirim tracking lead ke backend
             try {
                 fetch('/api/track/lead', {
@@ -338,7 +347,14 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
                         name: name,
                         phone: phone,
                         needs: needs,
-                        source: 'floating_wa_modal'
+                        source: 'floating_wa_modal',
+                        utm_source: utmSource,
+                        utm_medium: utmMedium,
+                        utm_campaign: utmCampaign,
+                        utm_term: utmTerm,
+                        utm_content: utmContent,
+                        referrer: referrer,
+                        page_url: window.location.href
                     })
                 }).catch(function() {});
             } catch (err) {}
