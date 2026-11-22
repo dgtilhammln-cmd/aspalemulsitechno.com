@@ -98,9 +98,11 @@ $sidebarMenu = [
 <aside class="sidebar" data-sidebar>
     <div class="sidebar__inner">
         <div class="sidebar__brand">
-            <span class="sidebar__logo" aria-hidden="true">AE</span>
+            <span class="sidebar__logo" aria-hidden="true">
+                <img src="/favicon.png" alt="Aspal Emulsi" class="sidebar__logo-img">
+            </span>
             <div class="sidebar__brand-meta">
-                <strong>Aspan Emulsi</strong>
+                <strong>Aspal Emulsi</strong>
                 <small>Admin Control</small>
             </div>
         </div>

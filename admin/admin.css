@@ -112,17 +112,22 @@ button {
 .sidebar__logo {
     width: 56px;
     height: 56px;
-    border-radius: 18px;
-    background: radial-gradient(circle at 25% 25%, #7efc2b 0%, #39d797 40%, #13284f 100%);
-    color: #020617;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 1.05rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    padding: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.sidebar__logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .sidebar__brand-meta {
@@ -364,15 +369,22 @@ body.sidebar-open .sidebar-overlay {
 .workspace-logo {
     width: 42px;
     height: 42px;
-    border-radius: 14px;
-    background: linear-gradient(140deg, rgba(126, 252, 43, 0.92), rgba(56, 245, 199, 0.85));
-    color: #031220;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    padding: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.workspace-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .workspace-branding__meta {
@@ -1570,14 +1582,24 @@ body.sidebar-open .sidebar-overlay {
 }
 
 .logo-circle {
-    color: transparent;
-    text-indent: -9999px;
-    width: 90px;
-    height: 40px;
-    background-image: url(../images/logo.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    margin: 0 auto 12px;
+}
+
+.logo-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 /* Legacy page header fallback */

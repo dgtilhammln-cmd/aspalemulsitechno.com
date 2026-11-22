@@ -209,7 +209,9 @@ function adminRenderTopbar(?array $options = null): void
                 <span></span>
             </button>
             <div class="workspace-branding">
-                <span class="workspace-logo" aria-hidden="true">AE</span>
+                <span class="workspace-logo" aria-hidden="true">
+                    <img src="/favicon.png" alt="Aspal Emulsi" class="workspace-logo-img">
+                </span>
                 <div class="workspace-branding__meta">
                     <span class="workspace-brand"><?= htmlspecialchars($brand, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                     <small class="workspace-subtitle"><?= htmlspecialchars($subtitle, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></small>

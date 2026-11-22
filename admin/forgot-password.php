@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="auth-wrapper">
             <div class="auth-card">
                 <div class="auth-brand">
-                    <span class="logo-circle">AE</span>
+                    <span class="logo-circle"><img src="/favicon.png" alt="Aspal Emulsi"></span>
                     <div>
                         <h1>Aspal Emulsi</h1>
                         <p>Reset password admin</p>
