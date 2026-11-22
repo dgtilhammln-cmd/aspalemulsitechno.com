@@ -136,6 +136,10 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
                 <input type="tel" id="leadInputPhone" required placeholder="Contoh: 081234567890">
             </div>
             <div class="lead-form-group">
+                <label for="leadInputKota">Kota / Lokasi Proyek <span style="color:#ef4444;">*</span></label>
+                <input type="text" id="leadInputKota" required placeholder="Contoh: Jakarta, Surabaya, Bandung...">
+            </div>
+            <div class="lead-form-group">
                 <label for="leadInputNeeds">Kebutuhan Proyek / Produk <span style="color:#ef4444;">*</span></label>
                 <textarea id="leadInputNeeds" rows="3" required placeholder="Contoh: Butuh aspal emulsi 10 drum untuk perbaikan jalan..."></textarea>
             </div>
@@ -320,11 +324,12 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            var name = (document.getElementById('leadInputName').value || '').trim();
+            var name  = (document.getElementById('leadInputName').value  || '').trim();
             var phone = (document.getElementById('leadInputPhone').value || '').trim();
+            var kota  = (document.getElementById('leadInputKota').value  || '').trim();
             var needs = (document.getElementById('leadInputNeeds').value || '').trim();
 
-            if (!name || !phone) return;
+            if (!name || !phone || !kota) return;
 
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<span>Menyimpan & Mengalihkan...</span>';
@@ -346,6 +351,7 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
                     body: JSON.stringify({
                         name: name,
                         phone: phone,
+                        kota: kota,
                         needs: needs,
                         source: 'floating_wa_modal',
                         utm_source: utmSource,
@@ -361,9 +367,10 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
 
             // Format template pesan WhatsApp
             var msg = 'Halo tim Aspal Emulsi Techno,\n' +
-                      'Saya ingin konsultasi penawaran:\n\n' +
+                      'Saya mendapatkan kontak dari *aspalemulsitechno.com* dan ingin konsultasi penawaran:\n\n' +
                       '• *Nama:* ' + name + '\n' +
                       '• *No. WhatsApp:* ' + phone + '\n' +
+                      '• *Kota / Lokasi:* ' + kota + '\n' +
                       '• *Kebutuhan:* ' + needs + '\n\n' +
                       'Mohon info penawaran harga & spesifikasi lengkapnya. Terima kasih!';
 

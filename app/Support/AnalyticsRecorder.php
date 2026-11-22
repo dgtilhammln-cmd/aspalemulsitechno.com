@@ -856,6 +856,7 @@ final class AnalyticsRecorder
     {
         $name = $this->safeString($payload['name'] ?? '', 150);
         $phone = $this->safeString($payload['phone'] ?? '', 50);
+        $kota = $this->safeString($payload['kota'] ?? $payload['city'] ?? '', 100);
         $needs = $this->safeString($payload['needs'] ?? '', 2000);
         $source = $this->safeString($payload['source'] ?? 'floating_wa', 100);
 
@@ -879,28 +880,29 @@ final class AnalyticsRecorder
         try {
             $stmt = $this->pdo->prepare('
                 INSERT INTO leads (
-                    name, phone, needs, source, device, ip_address, user_agent,
+                    name, phone, kota, needs, source, device, ip_address, user_agent,
                     utm_source, utm_medium, utm_campaign, utm_term, utm_content, referrer, created_at
                 ) VALUES (
-                    :name, :phone, :needs, :source, :device, :ip, :ua,
+                    :name, :phone, :kota, :needs, :source, :device, :ip, :ua,
                     :utm_source, :utm_medium, :utm_campaign, :utm_term, :utm_content, :referrer, NOW()
                 )
             ');
 
             return $stmt->execute([
-                ':name' => $name,
-                ':phone' => $phone,
-                ':needs' => $needs,
-                ':source' => $source,
-                ':device' => $deviceType,
-                ':ip' => $environment['ip'],
-                ':ua' => $environment['user_agent'],
-                ':utm_source' => $utmSource,
-                ':utm_medium' => $utmMedium,
+                ':name'         => $name,
+                ':phone'        => $phone,
+                ':kota'         => $kota,
+                ':needs'        => $needs,
+                ':source'       => $source,
+                ':device'       => $deviceType,
+                ':ip'           => $environment['ip'],
+                ':ua'           => $environment['user_agent'],
+                ':utm_source'   => $utmSource,
+                ':utm_medium'   => $utmMedium,
                 ':utm_campaign' => $utmCampaign,
-                ':utm_term' => $utmTerm,
-                ':utm_content' => $utmContent,
-                ':referrer' => $referrer,
+                ':utm_term'     => $utmTerm,
+                ':utm_content'  => $utmContent,
+                ':referrer'     => $referrer,
             ]);
         } catch (Throwable $throwable) {
             error_log('Record lead failed: ' . $throwable->getMessage());
@@ -917,14 +919,15 @@ final class AnalyticsRecorder
         }
 
         try {
-            $this->pdo->exec('
+            $this->pdo->exec("
                 CREATE TABLE IF NOT EXISTS leads (
                     id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                     name VARCHAR(150) NOT NULL,
                     phone VARCHAR(50) NOT NULL,
+                    kota VARCHAR(100) NULL,
                     needs TEXT NULL,
-                    source VARCHAR(100) DEFAULT "floating_wa",
-                    device VARCHAR(50) DEFAULT "Desktop",
+                    source VARCHAR(100) DEFAULT 'floating_wa',
+                    device VARCHAR(50) DEFAULT 'Desktop',
                     ip_address VARCHAR(45) NULL,
                     user_agent VARCHAR(500) NULL,
                     utm_source VARCHAR(120) NULL,
@@ -936,21 +939,28 @@ final class AnalyticsRecorder
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     INDEX idx_leads_created (created_at)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-            ');
+            ");
 
-            // Jika tabel sudah ada dari versi sebelumnya, pastikan kolom baru ditambahkan
+            // Pastikan kolom baru ada di tabel yang sudah ada sebelumnya
             $cols = [
-                'device' => 'VARCHAR(50) DEFAULT "Desktop"',
-                'utm_source' => 'VARCHAR(120) NULL',
-                'utm_medium' => 'VARCHAR(120) NULL',
-                'utm_campaign' => 'VARCHAR(150) NULL',
-                'utm_term' => 'VARCHAR(150) NULL',
-                'utm_content' => 'VARCHAR(150) NULL',
-                'referrer' => 'VARCHAR(500) NULL',
+                'kota'         => 'VARCHAR(100) NULL AFTER phone',
+                'device'       => "VARCHAR(50) DEFAULT 'Desktop' AFTER source",
+                'utm_source'   => 'VARCHAR(120) NULL AFTER user_agent',
+                'utm_medium'   => 'VARCHAR(120) NULL AFTER utm_source',
+                'utm_campaign' => 'VARCHAR(150) NULL AFTER utm_medium',
+                'utm_term'     => 'VARCHAR(150) NULL AFTER utm_campaign',
+                'utm_content'  => 'VARCHAR(150) NULL AFTER utm_term',
+                'referrer'     => 'VARCHAR(500) NULL AFTER utm_content',
             ];
             foreach ($cols as $colName => $colDef) {
                 try {
-                    $this->pdo->exec("ALTER TABLE leads ADD COLUMN {$colName} {$colDef}");
+                    $checkCol = $this->pdo->prepare(
+                        "SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'leads' AND COLUMN_NAME = :col"
+                    );
+                    $checkCol->execute([':col' => $colName]);
+                    if (!$checkCol->fetch()) {
+                        $this->pdo->exec("ALTER TABLE leads ADD COLUMN {$colName} {$colDef}");
+                    }
                 } catch (Throwable) {
                 }
             }
