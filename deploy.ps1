@@ -38,7 +38,6 @@ Write-Host ""
 Write-Host "[2/3] Push ke GitHub..." -ForegroundColor Yellow
 git push origin main
 if ($LASTEXITCODE -ne 0) {
-    # Fallback ke master jika branch aktif bernama master
     git push origin master
     if ($LASTEXITCODE -ne 0) {
         Write-Host "[ERROR] Gagal push ke GitHub!" -ForegroundColor Red
@@ -56,53 +55,57 @@ Set-Location $originalLocation
 Write-Host ""
 Write-Host "[3/3] Deploy ke Hosting..." -ForegroundColor Yellow
 
-# PENTING: Pakai @'...'@ (single-quote) agar PowerShell TIDAK expand variabel
-# Semua $ di sini adalah milik bash, bukan PowerShell
+# PENTING: Single-quote heredoc agar PowerShell TIDAK expand variabel bash ($)
 $bashScript = @'
 #!/bin/bash
+set -e
+
 DEPLOY_DIR="/home/u664715641/domains/aspalemulsitechno.com/public_html"
 REPO_URL="https://github.com/dgtilhammln-cmd/aspalemulsitechno.com.git"
 
 echo "=== Deploying to target: $DEPLOY_DIR ==="
+
+if [ ! -d "$DEPLOY_DIR" ]; then
+    echo "--- Folder belum ada, membuat direktori..."
+    mkdir -p "$DEPLOY_DIR"
+fi
+
+cd "$DEPLOY_DIR"
+
+# Putuskan git lama di server jika ada repo lama (maspirman dll)
+echo "--- Mengatur remote repository GitHub..."
 if [ -d "$DEPLOY_DIR/.git" ]; then
-    echo "--- [UPDATE] Repo ada, menarik update dari GitHub..."
-    cd "$DEPLOY_DIR"
-    git remote set-url origin "$REPO_URL" 2>/dev/null || true
-    git fetch origin main
-    git reset --hard origin/main
-elif [ -d "$DEPLOY_DIR" ]; then
-    echo "--- Setup repo di $DEPLOY_DIR..."
-    cd "$DEPLOY_DIR"
+    git remote remove origin 2>/dev/null || true
+    git remote add origin "$REPO_URL" 2>/dev/null || git remote set-url origin "$REPO_URL"
+else
+    echo "--- Inisialisasi git di server..."
     git init
     git branch -M main
-    git remote add origin "$REPO_URL" 2>/dev/null || git remote set-url origin "$REPO_URL"
-    git fetch origin main
-    git reset --hard origin/main
-else
-    echo "--- Membuat direktori $DEPLOY_DIR..."
-    mkdir -p "$DEPLOY_DIR"
-    cd "$DEPLOY_DIR"
-    git clone -b main "$REPO_URL" .
+    git remote add origin "$REPO_URL"
 fi
 
-if [ -d "$DEPLOY_DIR" ]; then
-    cd "$DEPLOY_DIR"
-    
-    # Update timestamp CSS file agar cache busting browser bekerja
-    [ -f "$DEPLOY_DIR/styles.css" ] && touch "$DEPLOY_DIR/styles.css"
-    [ -f "$DEPLOY_DIR/animations.css" ] && touch "$DEPLOY_DIR/animations.css"
-    
-    # Clear PHP OPcache jika ada
-    php -r "if(function_exists('opcache_reset')) { opcache_reset(); echo 'OPcache cleared\n'; }" 2>/dev/null || true
-    
-    echo ""
-    echo "--- Status Git Server: ---"
-    git status -s
-    git log -1 --oneline
-fi
+echo "--- Menarik data dari GitHub (progress)..."
+# Nonaktifkan interaktivitas agar tidak pernah hang minta prompt
+export GIT_TERMINAL_PROMPT=0
+git fetch --progress origin main
+
+echo "--- Menerapkan pembaruan (checkout & reset)..."
+git checkout -B main origin/main
+git reset --hard origin/main
+
+# Update timestamp CSS file agar cache busting browser bekerja
+[ -f "$DEPLOY_DIR/styles.css" ] && touch "$DEPLOY_DIR/styles.css"
+[ -f "$DEPLOY_DIR/animations.css" ] && touch "$DEPLOY_DIR/animations.css"
+
+# Clear PHP OPcache jika ada
+php -r "if(function_exists('opcache_reset')) { opcache_reset(); echo 'OPcache cleared\n'; }" 2>/dev/null || true
 
 echo ""
-echo "--- DEPLOY SELESAI! ---"
+echo "--- Status Git Server Terkini: ---"
+git log -1 --oneline
+
+echo ""
+echo "--- DEPLOY KE HOSTINGER SELESAI DENGAN SUKSES! ---"
 '@
 
 # Tulis script ke file temp lalu pipe ke SSH bash -s
