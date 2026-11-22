@@ -62,8 +62,8 @@ $anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
                 <ul>
                     <li><a href="<?= e($anchorBase . 'beranda') ?>">Beranda</a></li>
                     <li><a href="<?= e($anchorBase . 'layanan') ?>">Layanan</a></li>
-                    <li><a href="<?= e($anchorBase . 'produk') ?>">Produk</a></li>
-                    <li><a href="<?= e($anchorBase . 'blog') ?>">Blog</a></li>
+                    <li><a href="<?= url('/produk') ?>">Produk</a></li>
+                    <li><a href="<?= url('/blog') ?>">Blog</a></li>
                     <li><a href="<?= e($anchorBase . 'testimoni') ?>">Testimoni</a></li>
                     <li><a href="<?= e($anchorBase . 'galeri') ?>">Portofolio</a></li>
                     <li><a href="<?= e($anchorBase . 'hubungi') ?>">Hubungi</a></li>

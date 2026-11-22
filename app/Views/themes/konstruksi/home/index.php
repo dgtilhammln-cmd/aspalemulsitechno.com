@@ -77,6 +77,7 @@ $heroSlidesData = $heroSlides ?? [];
     </section>
 
     <section class="services2" id="layanan" data-animate="fade-up">
+        <div id="jasa" style="position:relative; top:-80px; visibility:hidden;"></div>
         <div class="container">
             <div class="services2-head" data-animate="fade-up">
                 <?= get_content_section('home', 'services-kicker', 'Layanan Unggulan', 'span', 'services2-kicker') ?>

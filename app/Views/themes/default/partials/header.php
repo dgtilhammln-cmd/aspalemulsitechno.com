@@ -4,15 +4,47 @@ $settings = $siteSettings ?? [];
 $companyName = $settings['company_name'] ?? 'ASPAL EMULSI TECHNO.COM';
 $logoUrl = $settings['logo_url'] ?? asset('images/logo.png');
 $instagramUrl = $settings['instagram_url'] ?? 'https://instagram.com';
-$anchorBase = ($currentRoute ?? null) === 'home' ? '#' : '/#';
+$isHome = ($currentRoute ?? null) === 'home';
+$homeAnchor = static function (string $anchor) use ($isHome): string {
+    return $isHome ? '#' . $anchor : url('/#' . $anchor);
+};
+
 $navItems = [
-    ['label' => 'Beranda', 'anchor' => 'beranda'],
-    ['label' => 'Layanan', 'anchor' => 'layanan'],
-    ['label' => 'Jasa Teknis', 'anchor' => 'jasa'],
-    ['label' => 'Produk', 'anchor' => 'produk'],
-    ['label' => 'Blog', 'anchor' => 'blog'],
-    ['label' => 'Testimoni', 'anchor' => 'testimoni'],
-    ['label' => 'Portofolio', 'anchor' => 'galeri'],
+    [
+        'label' => 'Beranda',
+        'url' => $homeAnchor('beranda'),
+        'active' => $isHome,
+    ],
+    [
+        'label' => 'Layanan',
+        'url' => $homeAnchor('layanan'),
+        'active' => false,
+    ],
+    [
+        'label' => 'Jasa Teknis',
+        'url' => $homeAnchor('jasa'),
+        'active' => false,
+    ],
+    [
+        'label' => 'Produk',
+        'url' => url('/produk'),
+        'active' => ($currentRoute ?? null) === 'produk',
+    ],
+    [
+        'label' => 'Blog',
+        'url' => url('/blog'),
+        'active' => ($currentRoute ?? null) === 'blog',
+    ],
+    [
+        'label' => 'Testimoni',
+        'url' => $homeAnchor('testimoni'),
+        'active' => false,
+    ],
+    [
+        'label' => 'Portofolio',
+        'url' => $homeAnchor('galeri'),
+        'active' => false,
+    ],
 ];
 ?>
 <header class="header" id="top">
@@ -34,9 +66,9 @@ $navItems = [
         </button>
         <nav class="main-nav" aria-label="Navigasi utama">
             <?php foreach ($navItems as $item): ?>
-                <a class="nav-link" href="<?= e($anchorBase . $item['anchor']) ?>"><?= e($item['label']) ?></a>
+                <a class="nav-link<?= !empty($item['active']) ? ' is-active' : '' ?>" href="<?= e($item['url']) ?>"><?= e($item['label']) ?></a>
             <?php endforeach; ?>
-            <a class="nav-link nav-link--cta" href="<?= e($anchorBase . 'hubungi') ?>">Hubungi</a>
+            <a class="nav-link nav-link--cta" href="<?= e($homeAnchor('hubungi')) ?>">Hubungi</a>
         </nav>
     </div>
 </header>
