@@ -444,7 +444,8 @@ function adminLayoutStart(array $options = []): void
     echo '        <meta name="viewport" content="width=device-width, initial-scale=1.0">' . PHP_EOL;
     echo '        ' . adminIdentityMeta() . PHP_EOL;
     echo '        <title>' . htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</title>' . PHP_EOL;
-    echo '        <link rel="stylesheet" href="admin.css">' . PHP_EOL;
+    $cssVersion = file_exists(__DIR__ . '/admin.css') ? (string) filemtime(__DIR__ . '/admin.css') : (string) time();
+    echo '        <link rel="stylesheet" href="admin.css?v=' . $cssVersion . '">' . PHP_EOL;
     echo '        <script src="app.js" defer></script>' . PHP_EOL;
     if ($headExtras !== '') {
         echo '        ' . $headExtras . PHP_EOL;

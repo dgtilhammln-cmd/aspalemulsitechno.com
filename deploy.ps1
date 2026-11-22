@@ -28,7 +28,7 @@ Write-Host "[1/3] Commit perubahan lokal..." -ForegroundColor Yellow
 git add .
 $status = git status --porcelain
 if ($status) {
-    git commit -m "Deploy: update terbaru aspalemulsitechno.com"
+    git commit -m "Deploy: update logo and cache busting"
 } else {
     Write-Host "Tidak ada perubahan baru untuk di-commit." -ForegroundColor Gray
 }
@@ -55,15 +55,14 @@ Set-Location $originalLocation
 Write-Host ""
 Write-Host "[3/3] Deploy ke Hosting..." -ForegroundColor Yellow
 
-# PENTING: Single-quote heredoc agar PowerShell TIDAK expand variabel bash ($)
 $bashScript = @'
 #!/bin/bash
-set -e
 
 REPO_URL="https://github.com/dgtilhammln-cmd/aspalemulsitechno.com.git"
 
 deploy_target() {
     TARGET="$1"
+    echo ""
     echo "=================================================="
     echo "=== Deploying to target: $TARGET ==="
     echo "=================================================="
@@ -75,23 +74,25 @@ deploy_target() {
 
     cd "$TARGET"
 
-    if [ -d "$TARGET/.git" ]; then
-        echo "--- Memperbarui remote repository di $TARGET..."
-        git remote remove origin 2>/dev/null || true
-        git remote add origin "$REPO_URL" 2>/dev/null || git remote set-url origin "$REPO_URL"
-    else
-        echo "--- Inisialisasi git baru di $TARGET..."
+    # Pastikan git diinisialisasi
+    if [ ! -d "$TARGET/.git" ]; then
+        echo "--- Inisialisasi git di $TARGET..."
         git init
-        git branch -M main
-        git remote add origin "$REPO_URL"
     fi
 
-    echo "--- Menarik update dari GitHub (progress)..."
-    export GIT_TERMINAL_PROMPT=0
-    git fetch --progress origin main
+    # Set remote URL
+    git remote remove origin 2>/dev/null || true
+    git remote add origin "$REPO_URL"
 
-    echo "--- Checkout dan reset hard ke origin/main..."
-    git checkout -B main origin/main
+    echo "--- Menarik commit terbaru dari GitHub..."
+    export GIT_TERMINAL_PROMPT=0
+    git fetch origin main
+
+    echo "--- Memaksa timpa working tree (force checkout & reset)..."
+    rm -f .git/index.lock 2>/dev/null || true
+    
+    # PENTING: Gunakan -f (force) agar tidak diblokir oleh file lama/untracked
+    git checkout -f -B main origin/main
     git reset --hard origin/main
 
     # Touch file CSS agar cache browser ter-refresh
@@ -99,14 +100,16 @@ deploy_target() {
     [ -f "$TARGET/animations.css" ] && touch "$TARGET/animations.css"
     [ -f "$TARGET/admin/admin.css" ] && touch "$TARGET/admin/admin.css"
 
-    # Reset OPcache PHP jika ada
+    # Reset OPcache PHP agar script PHP langsung menggunakan file terbaru
     php -r "if(function_exists('opcache_reset')) { opcache_reset(); echo 'OPcache cleared\n'; }" 2>/dev/null || true
 
     echo ""
-    echo "--- Status Git Server di $TARGET: ---"
+    echo "--- Verifikasi File Terkini di Server: ---"
+    ls -la "$TARGET/admin/partials/sidebar.php" "$TARGET/admin/admin.css"
+    echo ""
+    echo "--- Commit Aktif: ---"
     git log -1 --oneline
     echo "=== Berhasil deploy ke: $TARGET ==="
-    echo ""
 }
 
 # 1. Target UTAMA (Primary Domain Hostinger): /home/u664715641/public_html
@@ -117,6 +120,7 @@ if [ -d "/home/u664715641/domains/aspalemulsitechno.com/public_html" ]; then
     deploy_target "/home/u664715641/domains/aspalemulsitechno.com/public_html"
 fi
 
+echo ""
 echo "--- SEMUA PROSES DEPLOY SELESAI DENGAN SUKSES! ---"
 '@
 

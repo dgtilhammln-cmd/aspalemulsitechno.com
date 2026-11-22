@@ -132,7 +132,7 @@ $seoAlertCount = count($seoAlerts);
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <?= adminIdentityMeta() ?>
         <title>Dashboard Admin</title>
-        <link rel="stylesheet" href="admin.css">
+        <link rel="stylesheet" href="admin.css?v=<?= file_exists(__DIR__ . '/admin.css') ? filemtime(__DIR__ . '/admin.css') : time() ?>">
         <script src="app.js" defer></script>
     </head>
     <body class="dashboard">
