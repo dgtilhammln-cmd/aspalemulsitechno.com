@@ -60,52 +60,64 @@ $bashScript = @'
 #!/bin/bash
 set -e
 
-DEPLOY_DIR="/home/u664715641/domains/aspalemulsitechno.com/public_html"
 REPO_URL="https://github.com/dgtilhammln-cmd/aspalemulsitechno.com.git"
 
-echo "=== Deploying to target: $DEPLOY_DIR ==="
+deploy_target() {
+    TARGET="$1"
+    echo "=================================================="
+    echo "=== Deploying to target: $TARGET ==="
+    echo "=================================================="
+    
+    if [ ! -d "$TARGET" ]; then
+        echo "Directori $TARGET tidak ditemukan, skip."
+        return 0
+    fi
 
-if [ ! -d "$DEPLOY_DIR" ]; then
-    echo "--- Folder belum ada, membuat direktori..."
-    mkdir -p "$DEPLOY_DIR"
+    cd "$TARGET"
+
+    if [ -d "$TARGET/.git" ]; then
+        echo "--- Memperbarui remote repository di $TARGET..."
+        git remote remove origin 2>/dev/null || true
+        git remote add origin "$REPO_URL" 2>/dev/null || git remote set-url origin "$REPO_URL"
+    else
+        echo "--- Inisialisasi git baru di $TARGET..."
+        git init
+        git branch -M main
+        git remote add origin "$REPO_URL"
+    fi
+
+    echo "--- Menarik update dari GitHub (progress)..."
+    export GIT_TERMINAL_PROMPT=0
+    git fetch --progress origin main
+
+    echo "--- Checkout dan reset hard ke origin/main..."
+    git checkout -B main origin/main
+    git reset --hard origin/main
+
+    # Touch file CSS agar cache browser ter-refresh
+    [ -f "$TARGET/styles.css" ] && touch "$TARGET/styles.css"
+    [ -f "$TARGET/animations.css" ] && touch "$TARGET/animations.css"
+    [ -f "$TARGET/admin/admin.css" ] && touch "$TARGET/admin/admin.css"
+
+    # Reset OPcache PHP jika ada
+    php -r "if(function_exists('opcache_reset')) { opcache_reset(); echo 'OPcache cleared\n'; }" 2>/dev/null || true
+
+    echo ""
+    echo "--- Status Git Server di $TARGET: ---"
+    git log -1 --oneline
+    echo "=== Berhasil deploy ke: $TARGET ==="
+    echo ""
+}
+
+# 1. Target UTAMA (Primary Domain Hostinger): /home/u664715641/public_html
+deploy_target "/home/u664715641/public_html"
+
+# 2. Target ALTERNATIF (jika addon domain): /home/u664715641/domains/aspalemulsitechno.com/public_html
+if [ -d "/home/u664715641/domains/aspalemulsitechno.com/public_html" ]; then
+    deploy_target "/home/u664715641/domains/aspalemulsitechno.com/public_html"
 fi
 
-cd "$DEPLOY_DIR"
-
-# Putuskan git lama di server jika ada repo lama (maspirman dll)
-echo "--- Mengatur remote repository GitHub..."
-if [ -d "$DEPLOY_DIR/.git" ]; then
-    git remote remove origin 2>/dev/null || true
-    git remote add origin "$REPO_URL" 2>/dev/null || git remote set-url origin "$REPO_URL"
-else
-    echo "--- Inisialisasi git di server..."
-    git init
-    git branch -M main
-    git remote add origin "$REPO_URL"
-fi
-
-echo "--- Menarik data dari GitHub (progress)..."
-# Nonaktifkan interaktivitas agar tidak pernah hang minta prompt
-export GIT_TERMINAL_PROMPT=0
-git fetch --progress origin main
-
-echo "--- Menerapkan pembaruan (checkout & reset)..."
-git checkout -B main origin/main
-git reset --hard origin/main
-
-# Update timestamp CSS file agar cache busting browser bekerja
-[ -f "$DEPLOY_DIR/styles.css" ] && touch "$DEPLOY_DIR/styles.css"
-[ -f "$DEPLOY_DIR/animations.css" ] && touch "$DEPLOY_DIR/animations.css"
-
-# Clear PHP OPcache jika ada
-php -r "if(function_exists('opcache_reset')) { opcache_reset(); echo 'OPcache cleared\n'; }" 2>/dev/null || true
-
-echo ""
-echo "--- Status Git Server Terkini: ---"
-git log -1 --oneline
-
-echo ""
-echo "--- DEPLOY KE HOSTINGER SELESAI DENGAN SUKSES! ---"
+echo "--- SEMUA PROSES DEPLOY SELESAI DENGAN SUKSES! ---"
 '@
 
 # Tulis script ke file temp lalu pipe ke SSH bash -s
